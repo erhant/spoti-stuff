@@ -1,48 +1,34 @@
 import React from "react";
 import Header from "./Header";
-import Button from "@mui/material/Button";
-import LeakAddIcon from "@mui/icons-material/LeakAdd";
-import SearchIcon from "@mui/icons-material/Search";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import Typography from "@mui/material/Typography";
+import AppButton from "./AppButton";
 import styles from "./styles/App.module.scss"
 
-function makeAppButtonIcon(name: string) {
-  switch (name) {
-    case "SpotiSync":
-      return (<LeakAddIcon className={styles.icon} />);
-    case "SpotiFind":
-      return (<SearchIcon className={styles.icon} />)
-    case "SpotiPlay":
-      return (<PlayArrowIcon className={styles.icon} />)
+import { spotifyContext } from "./spotifyContext";
+
+class App extends React.Component {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      user: {}
+    };
   }
-}
 
-function AppButton({ name }: { name: string }) {
-  return (
-    <Button
-      variant="outlined"
-      className={styles.button}
-    >
-      {makeAppButtonIcon(name)}
-      <Typography variant="body1" component="span">
-        {name}
-      </Typography>
-    </Button>
-  )
-}
+  componentDidMount() {
+    // get and set currently logged in user to state
+  }
 
-function App() {
-  return (
-    <div>
-      <Header />
-      <div className={styles.main}>
-        <AppButton name='SpotiSync' />
-        <AppButton name='SpotiFind' />
-        <AppButton name='SpotiPlay' />
-      </div>
-    </div>
-  );
+  render() {
+    return (
+      <spotifyContext.Provider value={this.state.user}>
+        <Header />
+        <div className={styles.main}>
+          <AppButton name='SpotiSync' />
+          <AppButton name='SpotiFind' />
+          <AppButton name='SpotiPeek' />
+        </div>
+      </spotifyContext.Provider>
+    )
+  }
 }
 
 export default App;
