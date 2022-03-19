@@ -2,31 +2,25 @@ import React from "react";
 import Header from "./Header";
 import AppButton from "./AppButton";
 import styles from "./styles/App.module.scss"
+import { checkAuthentication } from "./api/auth";
 
-import { spotifyContext } from "./spotifyContext";
 
 class App extends React.Component {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      user: {}
-    };
-  }
-
   componentDidMount() {
-    // get and set currently logged in user to state
+    checkAuthentication();
   }
 
   render() {
     return (
-      <spotifyContext.Provider value={this.state.user}>
+      <div>
         <Header />
         <div className={styles.main}>
           <AppButton name='SpotiSync' />
           <AppButton name='SpotiFind' />
           <AppButton name='SpotiPeek' />
         </div>
-      </spotifyContext.Provider>
+      </div>
+
     )
   }
 }

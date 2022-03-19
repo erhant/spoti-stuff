@@ -5,6 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Typography from "@mui/material/Typography";
 import styles from "./styles/App.module.scss"
+import { AUTH_STORAGE_KEY } from './api/auth'
 
 function makeAppButtonIcon(name: string) {
   switch (name) {
@@ -18,15 +19,31 @@ function makeAppButtonIcon(name: string) {
 }
 
 export default function AppButton({ name }: { name: string }) {
-  return (
-    <Button
-      variant="outlined"
-      className={styles.button}
-    >
-      {makeAppButtonIcon(name)}
-      <Typography variant="body1" component="span" className={styles.text}>
-        {name}
-      </Typography>
-    </Button>
-  )
+  if (window.localStorage.getItem(AUTH_STORAGE_KEY)) {
+    return (
+      <Button
+        variant="outlined"
+        className={styles.button}
+      >
+        {makeAppButtonIcon(name)}
+        <Typography variant="body1" component="span" className={styles.text}>
+          {name}
+        </Typography>
+      </Button>
+    )
+  } else {
+    return (
+      <Button
+        disabled
+        variant="outlined"
+        className={styles.button}
+      >
+        {makeAppButtonIcon(name)}
+        <Typography variant="body1" component="span" className={styles.text}>
+          {name}
+        </Typography>
+      </Button>
+    )
+  }
+
 }
