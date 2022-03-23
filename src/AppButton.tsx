@@ -2,50 +2,54 @@ import React from "react";
 import Button from "@mui/material/Button";
 import LeakAddIcon from "@mui/icons-material/LeakAdd";
 import SearchIcon from "@mui/icons-material/Search";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import Typography from "@mui/material/Typography";
-import styles from "./styles/App.module.scss"
-// import { AUTH_STORAGE_KEY } from './api/auth'
-import { AuthContext } from './context/auth'
+import styles from "./styles/App.module.scss";
+import { AuthContext } from "./context/auth";
+import { EnumDictionary } from "./utils/EnumDictionary";
 
-function makeAppButtonIcon(name: string) {
-  switch (name) {
-    case "SpotiSync":
-      return (<LeakAddIcon className={styles.icon} id={styles.spotisync} />);
-    case "SpotiFind":
-      return (<SearchIcon className={styles.icon} id={styles.spotifind} />)
-    case "SpotiPeek":
-      return (<PlayArrowIcon className={styles.icon} id={styles.spotipeek} />)
-  }
+export enum AppSelection {
+  None = 0,
+  Sync,
+  Find,
+  Peek,
 }
 
-export default function AppButton({ name }: { name: string }) {
-  const { authenticated } = React.useContext(AuthContext);
-  if (authenticated) {
-    return (
-      <Button
-        variant="outlined"
-        className={styles.button}
-      >
-        {makeAppButtonIcon(name)}
-        <Typography variant="body1" component="span" className={styles.text}>
-          {name}
-        </Typography>
-      </Button>
-    )
-  } else {
-    return (
-      <Button
-        disabled
-        variant="outlined"
-        className={styles.button}
-      >
-        {makeAppButtonIcon(name)}
-        <Typography variant="body1" component="span" className={styles.text}>
-          {name}
-        </Typography>
-      </Button>
-    )
+const mapSelToName: EnumDictionary<AppSelection, string> = {
+  [AppSelection.None]: "",
+  [AppSelection.Sync]: "SpotiSync",
+  [AppSelection.Find]: "SpotiFind",
+  [AppSelection.Peek]: "SpotiPeek",
+};
+
+export default function AppButton({
+  selection,
+  setSelection,
+}: {
+  selection: AppSelection;
+  setSelection: (appSel: AppSelection) => void;
+}) {
+  const { authInfo } = React.useContext(AuthContext);
+
+  function makeAppButtonIcon() {
+    switch (selection) {
+      case AppSelection.Sync:
+        return <LeakAddIcon className={styles.icon} id={styles.spotisync} />;
+      case AppSelection.Find:
+        return <SearchIcon className={styles.icon} id={styles.spotifind} />;
+      case AppSelection.Peek:
+        return <PlayArrowIcon className={styles.icon} id={styles.spotipeek} />;
+      default:
+        return <></>;
+    }
   }
 
+  return (
+    <Button variant="outlined" disabled={!authInfo.isAuthenticated} className={styles.button}>
+      {makeAppButtonIcon()}
+      <Typography variant="body1" component="span" className={styles.text}>
+        {mapSelToName[selection]}
+      </Typography>
+    </Button>
+  );
 }

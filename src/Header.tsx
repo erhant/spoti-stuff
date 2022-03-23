@@ -1,9 +1,9 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import styles from "./styles/Header.module.scss"
-import LoginButton from './LoginButton';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import styles from "./styles/Header.module.scss";
+import LoginButton from "./LoginButton";
 
 function Header() {
   return (
@@ -14,7 +14,8 @@ function Header() {
             variant="h5"
             component="a"
             sx={{ flexGrow: 1, textDecoration: "none", color: "inherit" }}
-            href="/">
+            href="/"
+          >
             SpotiStuff
           </Typography>
           <LoginButton />

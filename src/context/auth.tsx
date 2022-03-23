@@ -1,7 +1,21 @@
-import { createContext } from 'react';
+import { createContext } from "react";
+
+export interface AuthInfo {
+  isAuthenticated: boolean;
+  accessToken: string;
+  expiresIn: number;
+  tokenType: string;
+}
+
+export const loggedOutAuthInfo: AuthInfo = {
+  isAuthenticated: false,
+  accessToken: "",
+  expiresIn: 0,
+  tokenType: "",
+};
 
 export const AuthContext = createContext({
-  authenticated: false,
-  setAuthenticated: (isAuth: boolean) => { }
+  authInfo: loggedOutAuthInfo,
+  // this empty function will be replaced by setState at the parent App.tsx
+  setAuthInfo: (authInfo: AuthInfo) => {},
 });
-

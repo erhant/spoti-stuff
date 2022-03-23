@@ -1,33 +1,48 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-// import { getUserWelcomeMessage } from './api/spotify'
-// import { makeLoginURL, AUTH_STORAGE_KEY } from './api/auth'
-import { AuthContext } from './context/auth'
-
+import React, { useContext, useState, useEffect } from "react";
+import Button from "@mui/material/Button";
+import * as spotify from "./api/spotify";
+import { AuthContext, loggedOutAuthInfo } from "./context/auth";
 
 export default function LoginButton() {
-  const { authenticated, setAuthenticated } = React.useContext(AuthContext);
-  const handleLogin = () => setAuthenticated(true);
-  const handleLogout = () => setAuthenticated(false);
+  const { authInfo, setAuthInfo } = useContext(AuthContext);
+  const [welcomeMsg, setWelcomeMsg] = useState("");
+  const handleLogout = () => setAuthInfo(loggedOutAuthInfo);
 
-  /*
-  < Button color="inherit" href={makeLoginURL()} >
-      Login to Spotify!
-    </Button >
+  // load username on login
+  // https://stackoverflow.com/questions/53715465/can-i-set-state-inside-a-useeffect-hook
+  useEffect(() => {
+    if (!authInfo.isAuthenticated) return;
 
-  */
-  if (authenticated) {
+    let active = true;
+    load();
+    return () => {
+      active = false;
+    };
+
+    async function load() {
+      setWelcomeMsg(""); // this is optional
+      const msg = await spotify.getUserWelcomeMessage(authInfo.accessToken);
+      if (!active) {
+        return;
+      }
+      setWelcomeMsg(msg);
+    }
+  }, [authInfo.isAuthenticated]);
+
+  if (authInfo.isAuthenticated) {
     return (
-      < Button color="inherit" onClick={handleLogout} >
-        Logout.
-      </Button >
-    )
+      <div>
+        <span>{welcomeMsg}</span>
+        <Button color="inherit" onClick={handleLogout} sx={{ ml: "2em" }}>
+          Logout
+        </Button>
+      </div>
+    );
   } else {
     return (
-      < Button color="inherit" onClick={handleLogin}  >
-        Login!
-      </Button >
-    )
+      <Button color="inherit" href={spotify.createLoginURL()}>
+        Login
+      </Button>
+    );
   }
-
 }
