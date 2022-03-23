@@ -2,27 +2,22 @@ import React from "react";
 import Header from "./Header";
 import AppButton from "./AppButton";
 import styles from "./styles/App.module.scss"
-import { checkAuthentication } from "./api/auth";
+import { AuthContext } from "./context/auth"
 
 
-class App extends React.Component {
-  componentDidMount() {
-    checkAuthentication();
-  }
+function App() {
+  const [authenticated, setAuthenticated] = React.useState(false);
 
-  render() {
-    return (
-      <div>
-        <Header />
-        <div className={styles.main}>
-          <AppButton name='SpotiSync' />
-          <AppButton name='SpotiFind' />
-          <AppButton name='SpotiPeek' />
-        </div>
+  return (
+    <AuthContext.Provider value={{ authenticated, setAuthenticated }}>
+      <Header />
+      <div className={styles.main}>
+        <AppButton name='SpotiSync' />
+        <AppButton name='SpotiFind' />
+        <AppButton name='SpotiPeek' />
       </div>
-
-    )
-  }
+    </AuthContext.Provider>
+  )
 }
 
 export default App;

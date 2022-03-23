@@ -5,9 +5,6 @@ import Typography from '@mui/material/Typography';
 import styles from "./styles/Header.module.scss"
 import LoginButton from './LoginButton';
 
-
-
-
 function Header() {
   return (
     <header>

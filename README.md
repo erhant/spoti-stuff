@@ -10,6 +10,8 @@ Uses [Material UI](https://mui.com/) components.
 
 Followed this [guide](https://blog.jarrodwatts.com/nextjs-eslint-prettier-husky) for code formatting & linting.
 
+Used [this](https://stackoverflow.com/a/64517088) for context
+
 Also see [here](https://levelup.gitconnected.com/how-to-build-a-spotify-player-with-react-in-15-minutes-7e01991bc4b6) for some good reference.
 
 Uses [Implicit Grant Flow](https://developer.spotify.com/documentation/general/guides/authorization/implicit-grant/).

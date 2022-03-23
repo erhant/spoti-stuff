@@ -5,7 +5,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Typography from "@mui/material/Typography";
 import styles from "./styles/App.module.scss"
-import { AUTH_STORAGE_KEY } from './api/auth'
+// import { AUTH_STORAGE_KEY } from './api/auth'
+import { AuthContext } from './context/auth'
 
 function makeAppButtonIcon(name: string) {
   switch (name) {
@@ -19,7 +20,8 @@ function makeAppButtonIcon(name: string) {
 }
 
 export default function AppButton({ name }: { name: string }) {
-  if (window.localStorage.getItem(AUTH_STORAGE_KEY)) {
+  const { authenticated } = React.useContext(AuthContext);
+  if (authenticated) {
     return (
       <Button
         variant="outlined"
