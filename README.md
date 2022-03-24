@@ -5,3 +5,11 @@ A collection of stuff I did with [Spotify web API](https://developer.spotify.com
 - **SpotiSync**: Synchronize multiple accounts to play together.
 - **SpotiFind**: See if you have added a song to any one of your playlists.
 - **SpotiPeek**: Simply see which song you are currently playing.
+
+## ToDos
+
+- Retrieve song link from textfield
+- Implement SpotiFind
+- Do one more module, to display track audio features.
+- Retrieve authentication token from session storage (respect expiration time too)
+- Better error handling
