@@ -45,7 +45,6 @@ export default function SpotiFind() {
                   </div>
                 );
               })}
-              ;
             </div>
           )}
         </div>
@@ -61,7 +60,13 @@ export default function SpotiFind() {
         </div>
       ) : (
         <div>
-          <TextField label="Song Link" variant="outlined" color="primary" sx={{ width: "100%" }} />
+          <TextField
+            label="Song Link"
+            variant="outlined"
+            color="primary"
+            sx={{ width: "100%" }}
+            defaultValue="https://open.spotify.com/track/1c1Yiulh0VyQAF5WEhLjGd?si=c2f2e2ecf0c741ac"
+          />
           <Button
             className={styles.searchButton}
             variant="outlined"

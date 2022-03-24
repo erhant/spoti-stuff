@@ -31,11 +31,12 @@ export default function SpotiPeek() {
         <LinearProgress className={styles.progress} />
       ) : playbackState && playbackState.isPlaying ? (
         <div>
+          <h1>You are currently listening to:</h1>
           <img src={playbackState.albumCover} className={styles.albumImage} />
-          <h1>
+          <h2>
             {playbackState.songName} ({playbackState.releaseDate})
-          </h1>
-          <h2>{playbackState.artistName}</h2>
+          </h2>
+          <h3>{playbackState.artistName}</h3>
         </div>
       ) : (
         <h1>Nothing is playing right now.</h1>
