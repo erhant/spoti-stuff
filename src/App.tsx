@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 // user imports
 import Header from "./Header";
-import AppMenu from "./AppMenu"
+import AppMenu from "./AppMenu";
 import { AuthContext, loggedOutAuthInfo, AuthInfo } from "./context/auth";
-
 
 // used to obtain the token from spotify redirection
 function parseHash(hash: string): AuthInfo {

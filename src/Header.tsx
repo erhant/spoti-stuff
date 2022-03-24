@@ -4,18 +4,12 @@ import { AppBar, Toolbar, Typography } from "@mui/material";
 import styles from "./styles/Header.module.scss";
 import LoginButton from "./LoginButton";
 
-
 function Header() {
   return (
     <header>
       <AppBar position="static" className={styles.appbar}>
         <Toolbar variant="regular">
-          <Typography
-            variant="h5"
-            component="a"
-            href="/"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
+          <Typography variant="h5" component="a" href="/" style={{ textDecoration: "none", color: "inherit" }}>
             SpotiStuff
           </Typography>
           <span style={{ flexGrow: 1 }}></span>
