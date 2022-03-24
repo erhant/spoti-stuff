@@ -40,7 +40,7 @@ export default function LoginButton() {
       </Button>
     </div>
   ) : (
-    <Button color="inherit" href={spotify.createLoginURL()} startIcon={<LoginIcon />}>
+    <Button color="inherit" href={spotify.LOGIN_URL} startIcon={<LoginIcon />}>
       Login
     </Button>
   );
