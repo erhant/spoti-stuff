@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Fab } from "@mui/material";
 import LeakAddIcon from "@mui/icons-material/LeakAdd";
 import SearchIcon from "@mui/icons-material/Search";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 // user imports
 import SpotiPeek from "./SpotiPeek";
 import SpotiFind from "./SpotiFind";
@@ -60,7 +61,11 @@ export default function AppMenu() {
       { /* Render the return button if not in menu */
         appSel === AppSelection.None
           ? (<></>)
-          : (<Button variant="contained" className={styles.returnButton} onClick={handleReturnClick}>Menu</Button>)
+          :
+          (<Fab variant="extended" color="primary" className={styles.returnButton} onClick={handleReturnClick}>
+            <ArrowLeftIcon sx={{ mr: 1 }} />
+            Menu
+          </Fab>)
       }
       { /* Render the menu or component */
         {

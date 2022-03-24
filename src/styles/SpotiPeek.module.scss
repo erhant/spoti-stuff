@@ -1,13 +1,17 @@
 $rad: 5em;
 
 .container {
-  display: flex;
-  background-color: lightgray;
   padding: calc($rad / 2);
-  border-radius: $rad;
-  align-items: center;
+  text-align: center;
 }
 
 .progress {
-  justify-self: center;
+  margin: 25% 0;
+}
+
+$imgWidth: 30%;
+.albumImage {
+  width: $imgWidth;
+  margin-left: calc((100% - $imgWidth) / 2);
+  margin-right: calc((100% - $imgWidth) / 2);
 }

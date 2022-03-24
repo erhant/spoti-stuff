@@ -1,17 +1,7 @@
 # SpotiStuff
 
-A collection of stuff I did with Spotify web API.
+A collection of stuff I did with [Spotify web API](https://developer.spotify.com/documentation/web-api/reference/#/). For Spotify authentication, it uses [Implicit Grant Flow](https://developer.spotify.com/documentation/general/guides/authorization/implicit-grant/). The application is made mostly with [Material UI](https://mui.com/) components.
 
 - **SpotiSync**: Synchronize multiple accounts to play together.
 - **SpotiFind**: See if you have added a song to any one of your playlists.
 - **SpotiPeek**: Simply see which song you are currently playing.
-
-Uses [Material UI](https://mui.com/) components.
-
-Followed this [guide](https://blog.jarrodwatts.com/nextjs-eslint-prettier-husky) for code formatting & linting.
-
-Used [this](https://stackoverflow.com/a/64517088), and [this](https://stackoverflow.com/questions/53715465/can-i-set-state-inside-a-useeffect-hook), [this](https://stackoverflow.com/a/66071205). also [this](https://stackoverflow.com/a/51432223)
-
-Also see [here](https://levelup.gitconnected.com/how-to-build-a-spotify-player-with-react-in-15-minutes-7e01991bc4b6) for some good reference.
-
-Uses [Implicit Grant Flow](https://developer.spotify.com/documentation/general/guides/authorization/implicit-grant/).

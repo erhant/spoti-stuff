@@ -18,7 +18,6 @@ export async function getUserWelcomeMessage(accessToken: string): Promise<string
   // console.log(res);
   // @ts-ignore
   return `Welcome ${res.display_name!}`;
-
 }
 
 export interface PlaybackState {
@@ -27,8 +26,8 @@ export interface PlaybackState {
   albumCover: string;
   artistName: string;
   songName: string;
+  releaseDate: string;
 };
-
 export async function getUserPlaybackState(accessToken: string): Promise<PlaybackState> {
   const reqBody = {
     method: "GET",
@@ -39,7 +38,7 @@ export async function getUserPlaybackState(accessToken: string): Promise<Playbac
   };
   let res = await fetch("https://api.spotify.com/v1/me/player", reqBody);
   res = await res.json();
-  // console.log(res);
+  console.log(res);
 
   return {
     // @ts-ignore
@@ -51,10 +50,14 @@ export async function getUserPlaybackState(accessToken: string): Promise<Playbac
     // @ts-ignore
     artistName: res.item.artists[0].name,
     // @ts-ignore
-    songName: res.item.name
+    songName: res.item.name,
+    // @ts-ignore
+    releaseDate: res.item.album.release_date.slice(0, 4)
   };
 
 }
+
+
 
 export function createLoginURL(): string {
   const clientId: string = process.env.REACT_APP_SPOTIFY_CLIENT_ID!;

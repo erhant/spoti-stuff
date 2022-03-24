@@ -1,0 +1,20 @@
+$rad: 5em;
+.container {
+  padding: calc($rad / 2);
+  text-align: center;
+}
+
+.progress {
+  margin: 25% 0;
+}
+
+$height: 100%;
+
+.searchButton {
+  height: $height;
+  margin-left: 2em;
+}
+
+.songlinkField {
+  height: $height;
+}

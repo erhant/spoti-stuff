@@ -14,7 +14,8 @@ export default function SpotiPeek() {
     isPlaying: false,
     albumCover: "",
     artistName: "",
-    songName: ""
+    songName: "",
+    releaseDate: ""
   });
 
   useEffect(() => {
@@ -37,10 +38,17 @@ export default function SpotiPeek() {
   return (
     <Container className={styles.container}>
       {
-        loading ? <LinearProgress className={styles.progress} />
-          : <div><img src={playbackState.albumCover} />
-            <p>{playbackState.songName} - {playbackState.artistName}</p></div>
+        loading
+          ? <LinearProgress className={styles.progress} />
+          : (playbackState.isPlaying ?
+            <div>
+              <img src={playbackState.albumCover} className={styles.albumImage} />
+              <h1>{playbackState.songName}  ({playbackState.releaseDate})</h1>
+              <h2>{playbackState.artistName}</h2>
+            </div>
+            : <h1>Nothing is playing right now.</h1>)
       }
+
 
     </Container>
   );
