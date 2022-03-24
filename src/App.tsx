@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
+// user imports
 import Header from "./Header";
-import AppButton, { AppSelection } from "./AppButton";
-import styles from "./styles/App.module.scss";
+import AppMenu from "./AppMenu"
 import { AuthContext, loggedOutAuthInfo, AuthInfo } from "./context/auth";
+
 
 // used to obtain the token from spotify redirection
 function parseHash(hash: string): AuthInfo {
+  // the given string is of form "#key1=val1&key2=val2&key3=val3"
+  // there is a generic-one-liner for this, but i want to be more explicit
   const kvs = hash.slice(1).split("&");
   return {
     isAuthenticated: true,
@@ -17,31 +20,21 @@ function parseHash(hash: string): AuthInfo {
 
 function App() {
   const [authInfo, setAuthInfo] = useState(loggedOutAuthInfo);
-  const [appSel, setAppSel] = useState(AppSelection.None);
 
   // componentDidMount
   useEffect(() => {
     if (window.location.hash.length > 0) {
       const authInfo = parseHash(window.location.hash);
       setAuthInfo(authInfo);
+    } else {
+      // TODO: check if session exists in storage
     }
   }, []);
 
-  function getAppSelection() {
-    if (appSel == AppSelection.None) {
-      return (
-        <div className={styles.main}>
-          <AppButton selection={appSel} setSelection={setAppSel} />
-          <AppButton selection={appSel} setSelection={setAppSel} />
-          <AppButton selection={appSel} setSelection={setAppSel} />
-        </div>
-      );
-    } else return <span>kdshgkdjh</span>;
-  }
   return (
     <AuthContext.Provider value={{ authInfo, setAuthInfo }}>
       <Header />
-      {getAppSelection()}
+      <AppMenu />
     </AuthContext.Provider>
   );
 }

@@ -1,9 +1,9 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+// user imports
 import styles from "./styles/Header.module.scss";
 import LoginButton from "./LoginButton";
+
 
 function Header() {
   return (
@@ -13,11 +13,12 @@ function Header() {
           <Typography
             variant="h5"
             component="a"
-            sx={{ flexGrow: 1, textDecoration: "none", color: "inherit" }}
             href="/"
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             SpotiStuff
           </Typography>
+          <span style={{ flexGrow: 1 }}></span>
           <LoginButton />
         </Toolbar>
       </AppBar>

@@ -2,8 +2,8 @@
 .button {
   align-self: center;
   background-color: white;
-  width: 10vw;
-  height: 10vw;
+  width: max(10vw, 15em);
+  height: max(10vw, 15em);
 
   // Icon background of the button
   .icon {
@@ -34,10 +34,19 @@
 }
 
 // Flexbox for the buttons
-.main {
+.selectionMenu {
   display: flex;
   justify-content: center;
   flex-grow: 1;
+  flex-wrap: wrap;
   gap: 5vw;
   margin-top: 5vh;
+}
+
+// Return button back to the menu
+$returnButtonOffset: 2em;
+.returnButton {
+  position: relative;
+  top: $returnButtonOffset;
+  left: $returnButtonOffset;
 }

@@ -14,4 +14,4 @@ parserOptions:
 plugins:
   - react
   - "@typescript-eslint"
-rules: { "require-jsdoc": "off", "no-unused-vars": "warning" }
+rules: { "require-jsdoc": "off", "no-unused-vars": 0 }

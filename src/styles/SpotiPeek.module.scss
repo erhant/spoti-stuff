@@ -1,0 +1,13 @@
+$rad: 5em;
+
+.container {
+  display: flex;
+  background-color: lightgray;
+  padding: calc($rad / 2);
+  border-radius: $rad;
+  align-items: center;
+}
+
+.progress {
+  justify-self: center;
+}

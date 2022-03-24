@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Button from "@mui/material/Button";
+// user imports
 import * as spotify from "./api/spotify";
 import { AuthContext, loggedOutAuthInfo } from "./context/auth";
 
@@ -29,20 +30,18 @@ export default function LoginButton() {
     }
   }, [authInfo.isAuthenticated]);
 
-  if (authInfo.isAuthenticated) {
-    return (
-      <div>
-        <span>{welcomeMsg}</span>
-        <Button color="inherit" onClick={handleLogout} sx={{ ml: "2em" }}>
-          Logout
-        </Button>
-      </div>
-    );
-  } else {
-    return (
-      <Button color="inherit" href={spotify.createLoginURL()}>
-        Login
+  return (authInfo.isAuthenticated
+    ?
+    (<div>
+      <span>{welcomeMsg}</span>
+      <Button color="inherit" onClick={handleLogout} sx={{ ml: "2em" }}>
+        Logout
       </Button>
-    );
-  }
+    </div>)
+    :
+    (<Button color="inherit" href={spotify.createLoginURL()}>
+      Login
+    </Button>))
+
+
 }
