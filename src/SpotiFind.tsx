@@ -5,22 +5,30 @@ import styles from "./styles/SpotiFind.module.scss";
 import * as spotify from "./api/spotify";
 import { AuthContext } from "./context/auth";
 
+const DEFAULT_SONGLINK: string = "https://open.spotify.com/track/56ludMgW4hyQhH6xqzypdO?si=9883047ae8424740";
+const SONGLINK_REGEX: RegExp = new RegExp(
+  /^https:\/\/open.spotify.com\/track\/[0-9a-zA-Z]{22}\?si=[0-9a-zA-Z]{16}$/,
+  "gs"
+);
+
 export default function SpotiFind() {
   const { authInfo } = useContext(AuthContext);
+  const [trackText, setTrackText] = useState<string>(DEFAULT_SONGLINK);
+  const [trackTextError, setTrackTextError] = useState<string>("");
   const [progressState, setProgressState] = useState<spotify.ProgressState>(null);
   const [trackState, setTrackState] = useState<spotify.TrackInfo>(null);
   const [matchesState, setMatchesState] = useState<spotify.PlaylistInfo[] | null>(null);
   const handleSearchClick = () => {
+    if (!SONGLINK_REGEX.test(trackText)) {
+      setTrackTextError("Your input is not a Spotify song link URL!");
+      return;
+    }
+
     setProgressState(null);
     setTrackState(null);
     setMatchesState(null);
     spotify
-      .findTrackInUserPlaylists(
-        authInfo.accessToken,
-        "https://open.spotify.com/track/4JW2yU9lIb8jCNv47PpTfZ?si=3105a22549e14f88",
-        setProgressState,
-        setTrackState
-      )
+      .findTrackInUserPlaylists(authInfo.accessToken, trackText, setProgressState, setTrackState)
       .then((matches) => setMatchesState(matches));
   };
 
@@ -65,13 +73,19 @@ export default function SpotiFind() {
             variant="outlined"
             color="primary"
             sx={{ width: "100%" }}
-            defaultValue="https://open.spotify.com/track/1c1Yiulh0VyQAF5WEhLjGd?si=c2f2e2ecf0c741ac"
+            defaultValue={DEFAULT_SONGLINK}
+            error={trackTextError !== ""}
+            helperText={trackTextError}
+            onChange={(e) => {
+              setTrackText(e.target.value);
+            }}
           />
           <Button
-            className={styles.searchButton}
             variant="outlined"
+            size="large"
             endIcon={<SearchIcon />}
             onClick={handleSearchClick}
+            sx={{ marginTop: "2em" }}
           >
             Find
           </Button>

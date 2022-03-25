@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Button, Typography, Fab } from "@mui/material";
-import LeakAddIcon from "@mui/icons-material/LeakAdd";
+import SafetyDividerIcon from "@mui/icons-material/SafetyDivider";
 import SearchIcon from "@mui/icons-material/Search";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 // user imports
 import SpotiPeek from "./SpotiPeek";
 import SpotiFind from "./SpotiFind";
-import SpotiSync from "./SpotiSync";
+import SpotiDiff from "./SpotiDiff";
 import { AuthContext } from "./context/auth";
 import styles from "./styles/AppMenu.module.scss";
 
 enum AppSelection {
   None = 0,
-  Sync = 1,
+  Diff = 1,
   Find = 2,
   Peek = 3,
 }
@@ -33,7 +33,7 @@ function AppButton({
       {
         {
           [AppSelection.None]: <></>,
-          [AppSelection.Sync]: <LeakAddIcon className={styles.icon} id={styles.spotisync} />,
+          [AppSelection.Diff]: <SafetyDividerIcon className={styles.icon} id={styles.spotidiff} />,
           [AppSelection.Find]: <SearchIcon className={styles.icon} id={styles.spotifind} />,
           [AppSelection.Peek]: <PlayArrowIcon className={styles.icon} id={styles.spotipeek} />,
         }[selection]
@@ -42,7 +42,7 @@ function AppButton({
         {
           {
             [AppSelection.None]: "",
-            [AppSelection.Sync]: "SpotiSync",
+            [AppSelection.Diff]: "SpotiDiff",
             [AppSelection.Find]: "SpotiFind",
             [AppSelection.Peek]: "SpotiPeek",
           }[selection]
@@ -77,15 +77,15 @@ export default function AppMenu() {
             <div className={styles.selectionMenu}>
               <AppButton selection={AppSelection.Find} setSelection={setAppSel} />
               <AppButton selection={AppSelection.Peek} setSelection={setAppSel} />
-              <AppButton selection={AppSelection.Sync} setSelection={setAppSel} />
+              <AppButton selection={AppSelection.Diff} setSelection={setAppSel} />
             </div>
           ),
           // SpotiFind
           [AppSelection.Find]: <SpotiFind />,
           // SpotiPeek
           [AppSelection.Peek]: <SpotiPeek />,
-          // SpotiSync
-          [AppSelection.Sync]: <SpotiSync />,
+          // SpotiDiff
+          [AppSelection.Diff]: <SpotiDiff />,
         }[appSel]
       }
     </div>

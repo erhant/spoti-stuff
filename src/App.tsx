@@ -23,10 +23,15 @@ function App() {
   // componentDidMount
   useEffect(() => {
     if (window.location.hash.length > 0) {
+      // redirected from spotify
       const authInfo = parseHash(window.location.hash);
       setAuthInfo(authInfo);
+      window.sessionStorage.setItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!, JSON.stringify(authInfo));
     } else {
-      // TODO: check if session exists in storage
+      // refreshed, check session storage for the authentication keys
+      if (window.sessionStorage.getItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!)) {
+        setAuthInfo(JSON.parse(window.sessionStorage.getItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!)!));
+      }
     }
   }, []);
 

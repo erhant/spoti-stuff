@@ -22,15 +22,28 @@ export async function getUserWelcomeMessage(accessToken: string): Promise<string
   return `Welcome ${res.display_name!}`;
 }
 
-export type PlaybackState = {
-  deviceName: string;
+export type PlayingTrack = {
   isPlaying: boolean;
-  albumCover: string;
-  artistName: string;
-  songName: string;
-  releaseDate: string;
+  isTrack: boolean;
+  album: {
+    name: string;
+    year: string;
+    id: string;
+    imageURL: string;
+    externalURL: string;
+  };
+  artist: {
+    name: string;
+    id: string;
+    externalURL: string;
+  };
+  track: {
+    name: string;
+    id: string;
+    externalURL: string;
+  };
 } | null;
-export async function getUserPlaybackState(accessToken: string): Promise<PlaybackState> {
+export async function getUserPlaybackState(accessToken: string): Promise<PlayingTrack> {
   let res;
   res = await fetch("https://api.spotify.com/v1/me/player", {
     method: "GET",
@@ -43,12 +56,24 @@ export async function getUserPlaybackState(accessToken: string): Promise<Playbac
   console.log(res);
 
   return {
-    deviceName: res.device.name,
     isPlaying: res.is_playing,
-    albumCover: res.item.album.images[0].url,
-    artistName: res.item.artists[0].name,
-    songName: res.item.name,
-    releaseDate: res.item.album.release_date.slice(0, 4),
+    isTrack: res.currently_playing_type === "track",
+    album: {
+      name: res.item.album.name,
+      year: res.item.album.release_date,
+      id: res.item.album.id,
+      externalURL: res.item.album.external_urls.spotify,
+    },
+    artist: {
+      name: res.item.artists[0].name,
+      id: res.item.artists[0].id,
+      externalURL: res.item.artists[0].external_urls.spotify,
+    },
+    track: {
+      name: res.item.name,
+      id: res.item.id,
+      externalURL: res.item.external_urls.spotify,
+    },
   };
 }
 
@@ -95,7 +120,7 @@ export async function findTrackInUserPlaylists(
     id: targetTrackID,
   };
   setTrackState(trackInfo);
-  console.log("Searching for", trackInfo);
+  // console.log("Searching for", trackInfo);
 
   // get user playlists
   let playlists: PlaylistInfo[] = [];
@@ -110,7 +135,6 @@ export async function findTrackInUserPlaylists(
       },
     });
     res = await res.json();
-    console.log(res);
     playlists = playlists.concat(
       res.items.map((i: any) => {
         return {
@@ -123,7 +147,7 @@ export async function findTrackInUserPlaylists(
     );
     nextURL = res.next;
   } while (nextURL);
-  console.log(playlists);
+  // console.log(playlists);
 
   // search the track in eachplaylist
   const matchedPlaylists: PlaylistInfo[] = [];
@@ -144,12 +168,9 @@ export async function findTrackInUserPlaylists(
         },
       });
       res = await res.json();
-      // console.log(res);
       nextURL = res.next;
       trackIDs = trackIDs.concat(res.items.map((i: any) => i.track.id));
     } while (nextURL);
-    // console.log(playlists[i]);
-    // console.log(trackIDs);
     if (trackIDs.includes(targetTrackID)) {
       matchedPlaylists.push(playlists[i]);
     }

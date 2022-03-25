@@ -9,7 +9,10 @@ import { AuthContext, loggedOutAuthInfo } from "./context/auth";
 export default function LoginButton() {
   const { authInfo, setAuthInfo } = useContext(AuthContext);
   const [welcomeMsg, setWelcomeMsg] = useState("");
-  const handleLogout = () => setAuthInfo(loggedOutAuthInfo);
+  const handleLogout = () => {
+    setAuthInfo(loggedOutAuthInfo);
+    window.sessionStorage.removeItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!);
+  };
 
   // load username on login
   // https://stackoverflow.com/questions/53715465/can-i-set-state-inside-a-useeffect-hook
