@@ -6,9 +6,12 @@ A collection of stuff I did with [Spotify web API](https://developer.spotify.com
 - **SpotiFind**: See if you have added a song to any one of your playlists.
 - **SpotiPeek**: Get audio features for the song that you are currently playing.
 
+UI design made in [Penpot](https://penpot.app/).
+
 ## ToDos
 
 - Implement SpotiDiff
+- Penpot design
 - Better error handling (with components). Also check status code of requests.
 - Implement tests
 - GO back to menu after logout!
