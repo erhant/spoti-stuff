@@ -12,7 +12,6 @@ export type PlaylistInfo = {
   id: string;
 } | null;
 export type TrackInfo = {
-  isTrack: boolean;
   album: {
     name: string;
     year: string;
@@ -25,11 +24,9 @@ export type TrackInfo = {
     id: string;
     externalURL: string;
   };
-  track: {
-    name: string;
-    id: string;
-    externalURL: string;
-  };
+  name: string;
+  id: string;
+  externalURL: string;
 } | null;
 export type ProgressState = {
   numPlaylists: number;
@@ -43,7 +40,7 @@ export type ProgressState = {
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const REDIRECT_URI = "http://localhost:3000";
 const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID!;
-const SCOPES = ["user-top-read", "user-read-currently-playing", "user-read-playback-state"];
+const SCOPES = ["user-top-read", "user-read-currently-playing", "user-read-playback-state", "playlist-read-private"];
 export const LOGIN_URL = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES.join(
   "%20"
 )}&response_type=token&show_dialog=true`;
@@ -73,7 +70,7 @@ export async function getCurrentUser(accessToken: string): Promise<User> {
     },
   });
   res = await res.json();
-  // console.log(res);
+  console.log(res);
   return {
     name: res.display_name,
     id: res.id,
@@ -98,7 +95,7 @@ export async function getUser(accessToken: string, userID: string): Promise<User
     },
   });
   res = await res.json();
-  // console.log(res);
+  console.log(res);
 
   return {
     name: res.display_name,
@@ -127,7 +124,6 @@ export async function getCurrentlyPlayingTrack(accessToken: string): Promise<Tra
   // console.log(res);
 
   return {
-    isTrack: res.currently_playing_type === "track",
     album: {
       name: res.item.album.name,
       year: res.item.album.release_date,
@@ -140,11 +136,9 @@ export async function getCurrentlyPlayingTrack(accessToken: string): Promise<Tra
       id: res.item.artists[0].id,
       externalURL: res.item.artists[0].external_urls.spotify,
     },
-    track: {
-      name: res.item.name,
-      id: res.item.id,
-      externalURL: res.item.external_urls.spotify,
-    },
+    name: res.item.name,
+    id: res.item.id,
+    externalURL: res.item.external_urls.spotify,
   };
 }
 export async function getTrack(accessToken: string, trackID: string): Promise<TrackInfo> {
@@ -160,7 +154,6 @@ export async function getTrack(accessToken: string, trackID: string): Promise<Tr
   // console.log(res);
 
   return {
-    isTrack: true,
     album: {
       name: res.album.name,
       year: res.album.release_date,
@@ -173,11 +166,9 @@ export async function getTrack(accessToken: string, trackID: string): Promise<Tr
       id: res.artists[0].id,
       externalURL: res.artists[0].external_urls.spotify,
     },
-    track: {
-      name: res.name,
-      id: res.id,
-      externalURL: res.external_urls.spotify,
-    },
+    name: res.name,
+    id: res.id,
+    externalURL: res.external_urls.spotify,
   };
 }
 
@@ -246,7 +237,36 @@ export async function getCurrentUserPlaylists(accessToken: string): Promise<Play
   return playlists;
 }
 export async function getUserPlaylists(accessToken: string, userID: string): Promise<PlaylistInfo[]> {
-  return [];
+  let playlists: PlaylistInfo[] = [];
+  let nextURL: string | null =
+    "https://api.spotify.com/v1/users/" +
+    userID +
+    "/playlists?fields=items(id,name,tracks(total),href,images)&limit=50";
+  let res;
+  do {
+    res = await fetch(nextURL!, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    res = await res.json();
+    playlists = playlists.concat(
+      res.items.map((i: any) => {
+        return {
+          name: i.name,
+          numTracks: i.tracks.total,
+          href: i.href,
+          playlistCover: safeImage(i),
+          id: i.id,
+        };
+      })
+    );
+    nextURL = res.next;
+  } while (nextURL);
+
+  return playlists;
 }
 
 /**

@@ -62,9 +62,9 @@ export default function SpotiFind() {
           <h2>Searching playlist: {progressState.currentPlaylist!.name} </h2>
           <img className={styles.playlistImage} src={progressState.currentPlaylist!.playlistCover} />
           <h2>
-            Target track: {trackState!.name} - {trackState!.artistName}
+            Target track: {trackState!.name} - {trackState!.artist.name}
           </h2>
-          <img className={styles.trackImage} src={trackState!.albumCover} />
+          <img className={styles.trackImage} src={trackState!.album.imageURL} />
         </div>
       ) : (
         <div>

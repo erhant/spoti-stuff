@@ -7,7 +7,7 @@ import { AuthContext } from "./context/auth";
 export default function SpotiPeek() {
   const { authInfo } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
-  const [playbackState, setPlaybackState] = useState<spotify.PlayingTrack>(null);
+  const [playbackState, setPlaybackState] = useState<spotify.TrackInfo>(null);
 
   useEffect(() => {
     let active = true;
@@ -29,12 +29,12 @@ export default function SpotiPeek() {
     <Container className={styles.container}>
       {loading ? (
         <LinearProgress className={styles.progress} />
-      ) : playbackState && playbackState.isPlaying ? (
+      ) : playbackState ? (
         <div>
           <h1>You are currently listening to:</h1>
           <img src={playbackState.album.imageURL} className={styles.albumImage} />
           <h2>
-            {playbackState.track.name} ({playbackState.album.year})
+            {playbackState.name} ({playbackState.album.year})
           </h2>
           <h3>{playbackState.artist.name}</h3>
         </div>
