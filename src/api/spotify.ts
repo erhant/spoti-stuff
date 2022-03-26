@@ -28,12 +28,29 @@ export type TrackInfo = {
   id: string;
   externalURL: string;
 } | null;
+export type ShortTrackInfo = {
+  name: string;
+  id: string;
+  artistName: string;
+  albumName: string;
+};
 export type ProgressState = {
   numPlaylists: number;
   donePlaylists: number;
   currentPlaylist: PlaylistInfo;
 } | null;
-
+export type TrackAudioFeatures = {
+  trackID: string;
+  acousticness: number;
+  danceability: number;
+  energy: number;
+  instrumentalness: number;
+  key: number; // C=0, C#=1, D=2, ...
+  liveness: number;
+  loudness: number;
+  speechiness: number;
+  valence: number;
+} | null;
 // Docs: https://developer.spotify.com/documentation/web-api/reference/#/
 
 // General config
@@ -297,4 +314,55 @@ export async function getTrackIDsInPlaylist(accessToken: string, playlistID: str
   } while (nextURL);
 
   return trackIDs;
+}
+
+/**
+ * https://developer.spotify.com/console/get-playlist-tracks/
+ *
+ * @param {string} accessToken
+ * @param {string} playlistID
+ */
+export async function getTrackShortInfosInPlaylist(accessToken: string, playlistID: string): Promise<ShortTrackInfo[]> {
+  let trackInfos: ShortTrackInfo[] = [];
+  let nextURL: string | null =
+    "https://api.spotify.com/v1/playlists/" +
+    playlistID +
+    "/tracks?fields=next,items(track(id,name,album(name),artists(name)))&limit=50";
+  do {
+    let res;
+    res = await fetch(nextURL!, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    res = await res.json();
+    // console.log(res);
+
+    trackInfos = trackInfos.concat(
+      res.items.map((t: any) => {
+        return {
+          name: t.track.name,
+          id: t.track.id,
+          artistName: t.track.artists[0].name,
+          albumName: t.track.album.name,
+        };
+      })
+    );
+
+    nextURL = res.next;
+  } while (nextURL);
+  return trackInfos;
+}
+
+/**
+ * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-several-audio-features
+ *
+ * @param {string} accessToken
+ * @param {string} trackID
+ */
+export async function getTrackAudioFeatures(accessToken: string, trackID: string): Promise<TrackAudioFeatures> {
+  // TODO
+  return null;
 }

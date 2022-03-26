@@ -39,7 +39,7 @@ export default function SpotiFind() {
           {matchesState.length === 0 ? (
             <h1>You do not have this song added.</h1>
           ) : (
-            <div>
+            <>
               <h2>This song is in {matchesState.length} lists:</h2>
               {matchesState.map((match, i) => {
                 return (
@@ -53,11 +53,11 @@ export default function SpotiFind() {
                   </div>
                 );
               })}
-            </div>
+            </>
           )}
         </div>
       ) : progressState ? (
-        <div>
+        <>
           <LinearProgress className={styles.progress} />
           <h2>Searching playlist: {progressState.currentPlaylist!.name} </h2>
           <img className={styles.playlistImage} src={progressState.currentPlaylist!.playlistCover} />
@@ -65,9 +65,10 @@ export default function SpotiFind() {
             Target track: {trackState!.name} - {trackState!.artist.name}
           </h2>
           <img className={styles.trackImage} src={trackState!.album.imageURL} />
-        </div>
+        </>
       ) : (
-        <div>
+        <>
+          <h1>Please enter the song link you would like to search.</h1>
           <TextField
             label="Song Link"
             variant="outlined"
@@ -89,7 +90,7 @@ export default function SpotiFind() {
           >
             Find
           </Button>
-        </div>
+        </>
       )}
     </Container>
   );

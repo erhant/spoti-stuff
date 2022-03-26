@@ -28,16 +28,17 @@ export default function SpotiPeek() {
   return (
     <Container className={styles.container}>
       {loading ? (
-        <LinearProgress className={styles.progress} />
+        <>
+          <h1>Retrieving playback information...</h1>
+          <LinearProgress className={styles.progress} />
+        </>
       ) : playbackState ? (
-        <div>
+        <>
           <h1>You are currently listening to:</h1>
           <img src={playbackState.album.imageURL} className={styles.albumImage} />
-          <h2>
-            {playbackState.name} ({playbackState.album.year})
-          </h2>
+          <h2>{playbackState.name}</h2>
           <h3>{playbackState.artist.name}</h3>
-        </div>
+        </>
       ) : (
         <h1>Nothing is playing right now.</h1>
       )}

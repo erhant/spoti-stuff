@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import Button from "@mui/material/Button";
+import { Avatar, Button } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 // user imports
@@ -37,7 +37,16 @@ export default function LoginButton() {
 
   return authInfo.isAuthenticated ? (
     <div>
-      {user ? <span>Welcome {user!.name}</span> : <></>}
+      {user ? (
+        <>
+          <span>
+            Welcome {user!.name}
+            {/* <Avatar alt="user pic" src={user!.imageURL} sx={{}} /> */}
+          </span>
+        </>
+      ) : (
+        <></>
+      )}
       <Button color="inherit" onClick={handleLogout} sx={{ ml: "2em" }} startIcon={<LogoutIcon />}>
         Logout
       </Button>
