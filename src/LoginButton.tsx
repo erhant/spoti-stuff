@@ -8,7 +8,7 @@ import { AuthContext, loggedOutAuthInfo } from "./context/auth";
 
 export default function LoginButton() {
   const { authInfo, setAuthInfo } = useContext(AuthContext);
-  const [welcomeMsg, setWelcomeMsg] = useState("");
+  const [user, setUser] = useState<spotify.User>(null);
   const handleLogout = () => {
     setAuthInfo(loggedOutAuthInfo);
     window.sessionStorage.removeItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!);
@@ -26,18 +26,18 @@ export default function LoginButton() {
     };
 
     async function load() {
-      setWelcomeMsg(""); // this is optional
-      const msg = await spotify.getUserWelcomeMessage(authInfo.accessToken);
+      setUser(null); // this is optional
+      const res = await spotify.getCurrentUser(authInfo.accessToken);
       if (!active) {
         return;
       }
-      setWelcomeMsg(msg);
+      setUser(res);
     }
   }, [authInfo.isAuthenticated]);
 
   return authInfo.isAuthenticated ? (
     <div>
-      <span>{welcomeMsg}</span>
+      {user ? <span>Welcome {user!.name}</span> : <></>}
       <Button color="inherit" onClick={handleLogout} sx={{ ml: "2em" }} startIcon={<LogoutIcon />}>
         Logout
       </Button>

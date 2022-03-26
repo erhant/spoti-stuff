@@ -1,11 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import AddIcon from "@mui/icons-material/Add";
-import { Button } from "@mui/material";
-import { LOGIN_URL } from "./api/spotify";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import { Button, TextField, Typography, Container, Grid } from "@mui/material";
+import * as spotify from "./api/spotify";
 import { AuthInfo, AuthContext } from "./context/auth";
 
 function Item({ text }: { text: string }) {
@@ -14,9 +11,22 @@ function Item({ text }: { text: string }) {
 
 export default function SpotiDiff() {
   const { authInfo } = useContext(AuthContext);
-  const [pair, setPair] = useState("");
+  const [myPlaylists, setMyPlaylists] = useState<spotify.PlaylistInfo[] | null>(null);
+  const [pairPlaylists, setPairPlaylists] = useState<spotify.PlaylistInfo[] | null>(null);
+  const [pair, setPair] = useState<spotify.User>(null);
+  const [pairName, setPairName] = useState("");
+  const handleAddPair = () => {
+    spotify.getUser(authInfo.accessToken, pairName).then((user) => setPair(user));
+  };
+  const handleRemovePair = () => setPair(null);
 
-  useEffect(() => {});
+  useEffect(() => {
+    if (pair) {
+      // a new pair is loaded, load their playlists
+      alert("New pair loaded!");
+    }
+  }, [pair]);
+
   return (
     <Container>
       <Grid container>
@@ -26,9 +36,45 @@ export default function SpotiDiff() {
           </Button>
         </Grid>
         <Grid item xs={6}>
-          <Button variant="contained" onClick={() => {}} color="secondary" sx={{ width: "100%", height: "100%" }}>
-            <PersonAddIcon />
-          </Button>
+          {pair ? (
+            <>
+              <Typography
+                variant="h5"
+                component="a"
+                style={{ textDecoration: "none", color: "inherit", width: "80%", height: "100%" }}
+              >
+                {pair.name}
+              </Typography>
+              <Button
+                variant="contained"
+                onClick={handleRemovePair}
+                color="secondary"
+                sx={{ width: "20%", height: "100%" }}
+              >
+                <PersonRemoveIcon />
+              </Button>
+            </>
+          ) : (
+            <>
+              <TextField
+                label="Spotify Username"
+                variant="outlined"
+                color="primary"
+                sx={{ width: "80%", height: "100%" }}
+                onChange={(e) => {
+                  setPairName(e.target.value);
+                }}
+              />
+              <Button
+                variant="contained"
+                onClick={handleAddPair}
+                color="secondary"
+                sx={{ width: "20%", height: "100%" }}
+              >
+                <PersonAddIcon />
+              </Button>
+            </>
+          )}
         </Grid>
         {/* My playlists */}
         <Grid item xs={6}>
