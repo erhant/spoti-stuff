@@ -5,11 +5,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 // user imports
+import Header from "./Header";
 import SpotiPeek from "./SpotiPeek";
 import SpotiFind from "./SpotiFind";
 import SpotiDiff from "./SpotiDiff";
 import { AuthContext } from "./context/auth";
-import styles from "./styles/AppMenu.module.scss";
+import styles from "./styles/MainMenu.module.scss";
 
 enum AppSelection {
   None = 0,
@@ -52,12 +53,13 @@ function AppButton({
   );
 }
 
-export default function AppMenu() {
+export default function MainMenu() {
   const [appSel, setAppSel] = useState(AppSelection.None);
   const handleReturnClick = () => setAppSel(AppSelection.None);
 
   return (
     <div>
+      <Header />
       {
         /* Render the return button if not in menu */
         appSel === AppSelection.None ? (

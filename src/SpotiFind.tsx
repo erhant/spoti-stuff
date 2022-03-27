@@ -15,8 +15,8 @@ export default function SpotiFind() {
   const { authInfo } = useContext(AuthContext);
   const [trackText, setTrackText] = useState<string>(DEFAULT_SONGLINK);
   const [trackTextError, setTrackTextError] = useState("");
-  const [progressState, setProgressState] = useState<spotify.ProgressState>(null);
-  const [trackState, setTrackState] = useState<spotify.TrackInfo>(null);
+  const [progressState, setProgressState] = useState<spotify.ProgressState | null>(null);
+  const [trackState, setTrackState] = useState<spotify.TrackInfo | null>(null);
   const [matchesState, setMatchesState] = useState<spotify.PlaylistInfo[] | null>(null);
   const handleSearchClick = () => {
     if (!SONGLINK_REGEX.test(trackText)) {

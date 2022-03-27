@@ -34,6 +34,7 @@ type ShortInfoWithMatch = spotify.ShortTrackInfo & { match?: boolean };
 
 export default function SpotiDiff() {
   const { authInfo } = useContext(AuthContext);
+
   // my playlists, the selected one and its tracks
   const [myPlaylists, setMyPlaylists] = useState<spotify.PlaylistInfo[] | null>(null);
   const [mySelectedPlaylistValue, setMySelectedPlaylistValue] = useState("");
@@ -43,19 +44,25 @@ export default function SpotiDiff() {
   // pair user
   const [targetPairText, setTargetPairText] = useState(DEFAULT_PAIRLINK);
   const [targetPairTextTextError, setTargetPairTextError] = useState("");
-  const [pair, setPair] = useState<spotify.User>(null);
+  const [pair, setPair] = useState<spotify.User | null>(null);
   const handleAddPair = () => {
     if (!PAIRLINK_REGEX.test(targetPairText)) {
       setTargetPairTextError("Your input is not a Spotify profile URL!");
       return;
     }
     setTargetPairTextError("");
-
     // parse track string to obtain track id, it is the string between furthest '/' and the '?'
     const pairID: string = targetPairText.split("?")[0].split("/").at(-1)!;
     spotify.getUser(authInfo!.accessToken, pairID).then((user) => setPair(user));
   };
-  const handleRemovePair = () => setPair(null);
+  const handleRemovePair = () => {
+    setPairPlaylists(null);
+    setPairPlaylistTracks([]);
+    setPairSelectedPlaylistValue("");
+    setPair(null);
+    setTargetPairText(targetPairText);
+    setTargetPairTextError("");
+  };
 
   // pair user's playlists
   const [pairPlaylists, setPairPlaylists] = useState<spotify.PlaylistInfo[] | null>(null);
@@ -63,7 +70,7 @@ export default function SpotiDiff() {
   const [pairPlaylistTracks, setPairPlaylistTracks] = useState<ShortInfoWithMatch[]>([]);
   const handlePairPlaylistChange = (e: SelectChangeEvent) => setPairSelectedPlaylistValue(e.target.value);
 
-  const [loadingTracks, setLoadingTracks] = useState(true);
+  const [isMatchingTracks, setIsMatchingTracks] = useState(true);
 
   function SelectionBox({
     playlists,
@@ -79,14 +86,12 @@ export default function SpotiDiff() {
     return playlists ? (
       <FormControl fullWidth>
         <InputLabel>{label}</InputLabel>
-        <Select value={selection} label="Select Playlist" onChange={changeHandler}>
-          {playlists.map((pl, i) => {
-            return (
-              <MenuItem key={i} value={i}>
-                {pl!.name}
-              </MenuItem>
-            );
-          })}
+        <Select value={selection} onChange={changeHandler} variant="standard">
+          {playlists.map((pl: spotify.PlaylistInfo, i: number) => (
+            <MenuItem key={i} value={pl.id}>
+              {pl.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     ) : (
@@ -95,41 +100,43 @@ export default function SpotiDiff() {
   }
 
   function TracksTable({ tracks }: { tracks: ShortInfoWithMatch[] }) {
-    if (tracks.length === 0) return <></>;
-    if (loadingTracks)
+    // no tracks uploaded for this table yet
+    if (tracks.length === 0) {
+      return <></>;
+    }
+    // tracks are in, but they are being matched right now
+    if (isMatchingTracks) {
       return (
         <Stack spacing={1}>
-          <Skeleton variant="rectangular" width="100%" height="2em" />
-          <Skeleton variant="rectangular" width="100%" height="2em" />
-          <Skeleton variant="rectangular" width="100%" height="2em" />
+          <Skeleton animation="wave" />
+          <Skeleton animation="wave" />
+          <Skeleton animation="wave" />
         </Stack>
       );
-    else
-      return (
-        <TableContainer>
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                {["Match", "Name", "Artist", "Album"].map((s: string, i) => (
-                  <TableCell key={i}>{s}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tracks.map((track, i) => (
-                <TableRow key={i}>
-                  <TableCell component="th" scope="row">
-                    {track.match ? "Yes" : "No"}
-                  </TableCell>
-                  <TableCell>{track.name}</TableCell>
-                  <TableCell>{track.artistName}</TableCell>
-                  <TableCell>{track.albumName}</TableCell>
-                </TableRow>
+    }
+    // mathcing is done, tracks are ready!
+    return (
+      <TableContainer>
+        <Table sx={{ minWidth: 650 }}>
+          <TableHead>
+            <TableRow>
+              {["Name", "Artist", "Album"].map((s: string, i) => (
+                <TableCell key={i}>{s}</TableCell>
               ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      );
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tracks.map((track, i) => (
+              <TableRow key={i} className={track.match ? styles.matchedRecord : styles.unmatchedRecord}>
+                <TableCell size="small">{track.name}</TableCell>
+                <TableCell size="small">{track.artistName}</TableCell>
+                <TableCell size="small">{track.albumName}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
   }
 
   // new pair is given
@@ -144,7 +151,9 @@ export default function SpotiDiff() {
   useEffect(() => {
     if (myPlaylists && mySelectedPlaylistValue !== "") {
       const pl: spotify.PlaylistInfo = myPlaylists[parseInt(mySelectedPlaylistValue)];
-      spotify.getTrackShortInfosInPlaylist(authInfo.accessToken, pl!.id).then((tinfos) => setMyPlaylistTracks(tinfos));
+      spotify.getTrackShortInfosInPlaylist(authInfo.accessToken, pl.id).then((tinfos) => {
+        setMyPlaylistTracks(tinfos);
+      });
     }
   }, [mySelectedPlaylistValue]);
 
@@ -152,14 +161,16 @@ export default function SpotiDiff() {
   useEffect(() => {
     if (pairPlaylists && pairSelectedPlaylistValue !== "") {
       const pl: spotify.PlaylistInfo = pairPlaylists[parseInt(pairSelectedPlaylistValue)];
-      spotify
-        .getTrackShortInfosInPlaylist(authInfo.accessToken, pl!.id)
-        .then((tinfos) => setPairPlaylistTracks(tinfos));
+      spotify.getTrackShortInfosInPlaylist(authInfo.accessToken, pl.id).then((tinfos) => {
+        setPairPlaylistTracks(tinfos);
+      });
     }
   }, [pairSelectedPlaylistValue]);
 
+  // match tracks
   useEffect(() => {
     if (myPlaylistTracks.length > 0 && pairPlaylistTracks.length > 0) {
+      setIsMatchingTracks(true);
       const myTrackIDS = myPlaylistTracks.map((t: any) => t.id);
       const pairTrackIDS = pairPlaylistTracks.map((t: any) => t.id);
       // mark the intersecting arrays as matched
@@ -172,9 +183,9 @@ export default function SpotiDiff() {
           pairPlaylistTracks[j].match = true;
         }
       }
-      setLoadingTracks(false);
+      setIsMatchingTracks(false);
     }
-  }, [myPlaylistTracks, pairPlaylistTracks]);
+  }, [JSON.stringify(myPlaylistTracks), JSON.stringify(pairPlaylistTracks)]);
 
   // compoundDidMount
   useEffect(() => {
@@ -183,51 +194,46 @@ export default function SpotiDiff() {
 
   return (
     <Container>
-      <Grid container rowGap="1em" columnGap="0.5em" sx={{ flexGrow: 1 }}>
-        {/* Current user */}
-        <Grid item xs={5}>
-          <Button variant="contained" disabled sx={{ width: "100%", height: "100%" }}>
-            Me
-          </Button>
-        </Grid>
+      <Grid container rowGap="1em" columnGap="0.5em" justifyContent="center">
         {/* Target user */}
-        <Grid item xs={5}>
+        <Grid item xs={9} sx={{ height: "3.5em" }}>
           {pair ? (
-            <>
-              <Typography
-                variant="h5"
-                component="a"
-                style={{ textDecoration: "none", color: "inherit", width: "80%", height: "100%" }}
-              >
-                {pair.name}
-              </Typography>
-              <Button
-                variant="contained"
-                onClick={handleRemovePair}
-                color="primary"
-                sx={{ width: "20%", height: "100%" }}
-              >
-                <PersonRemoveIcon />
-              </Button>
-            </>
+            <Typography
+              variant="h5"
+              component="a"
+              style={{ textDecoration: "none", color: "inherit", width: "100%", height: "100%", flexGrow: 1 }}
+            >
+              {pair.name}
+            </Typography>
           ) : (
-            <>
-              <TextField
-                label="Spotify Username"
-                variant="outlined"
-                color="primary"
-                value={targetPairText}
-                sx={{ width: "80%", height: "100%" }}
-                error={targetPairTextTextError !== ""}
-                helperText={targetPairTextTextError}
-                onChange={(e) => {
-                  setTargetPairText(e.target.value);
-                }}
-              />
-              <Button variant="contained" onClick={handleAddPair} color="primary" sx={{ width: "20%", height: "100%" }}>
-                <PersonAddIcon />
-              </Button>
-            </>
+            <TextField
+              label="Paste other user's Spotify Profile URL"
+              variant="outlined"
+              color="primary"
+              value={targetPairText}
+              sx={{ width: "100%", height: "100%" }}
+              error={targetPairTextTextError !== ""}
+              helperText={targetPairTextTextError}
+              onChange={(e) => {
+                setTargetPairText(e.target.value);
+              }}
+            />
+          )}
+        </Grid>
+        <Grid item xs={1}>
+          {pair ? (
+            <Button
+              variant="contained"
+              onClick={handleRemovePair}
+              color="primary"
+              sx={{ width: "100%", height: "100%" }}
+            >
+              <PersonRemoveIcon />
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={handleAddPair} color="primary" sx={{ width: "100%", height: "100%" }}>
+              <PersonAddIcon />
+            </Button>
           )}
         </Grid>
         {/* My playlists */}
@@ -236,7 +242,7 @@ export default function SpotiDiff() {
             playlists={myPlaylists}
             selection={mySelectedPlaylistValue}
             changeHandler={handleMyPlaylistChange}
-            label="Select Playlist"
+            label="Choose your playlist"
           />
         </Grid>
         {/* Their playlists */}
@@ -246,12 +252,18 @@ export default function SpotiDiff() {
               playlists={pairPlaylists}
               selection={pairSelectedPlaylistValue}
               changeHandler={handlePairPlaylistChange}
-              label="Select Playlist"
+              label="Other User's Playlists"
             />
           ) : (
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Choose a user first.</InputLabel>
-              <Select labelId="pairplaylist-select" id="pairplaylist-select" value={""} disabled></Select>
+              <Select
+                labelId="pairplaylist-select"
+                id="pairplaylist-select"
+                value={""}
+                disabled
+                variant="standard"
+              ></Select>
             </FormControl>
           )}
         </Grid>

@@ -3,14 +3,14 @@ export type User = {
   id: string;
   externalURL: string;
   imageURL: string;
-} | null;
+};
 export type PlaylistInfo = {
   name: string;
   numTracks: number;
   href: string;
   playlistCover: string;
   id: string;
-} | null;
+};
 export type TrackInfo = {
   album: {
     name: string;
@@ -27,7 +27,7 @@ export type TrackInfo = {
   name: string;
   id: string;
   externalURL: string;
-} | null;
+};
 export type ShortTrackInfo = {
   name: string;
   id: string;
@@ -38,7 +38,7 @@ export type ProgressState = {
   numPlaylists: number;
   donePlaylists: number;
   currentPlaylist: PlaylistInfo;
-} | null;
+};
 export type TrackAudioFeatures = {
   trackID: string;
   acousticness: number;
@@ -50,10 +50,8 @@ export type TrackAudioFeatures = {
   loudness: number;
   speechiness: number;
   valence: number;
-} | null;
-// Docs: https://developer.spotify.com/documentation/web-api/reference/#/
+};
 
-// General config
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const REDIRECT_URI = "http://localhost:3000";
 const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID!;
@@ -361,6 +359,26 @@ export async function getTrackShortInfosInPlaylist(accessToken: string, playlist
  * @param {string} trackID
  */
 export async function getTrackAudioFeatures(accessToken: string, trackID: string): Promise<TrackAudioFeatures> {
-  // TODO
-  return null;
+  let res;
+  res = await fetch("https://api.spotify.com/v1/audio-features/" + trackID, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  res = await res.json();
+  console.log(res);
+  return {
+    trackID: trackID,
+    acousticness: res.acousticness,
+    danceability: res.danceability,
+    energy: res.energy,
+    instrumentalness: res.instrumentalness,
+    key: res.key, // C=0, C#=1, D=2, ...
+    liveness: res.liveness,
+    loudness: res.loudness,
+    speechiness: res.speechiness,
+    valence: res.valence,
+  };
 }

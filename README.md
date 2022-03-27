@@ -1,6 +1,6 @@
 # SpotiStuff
 
-A collection of stuff I did with [Spotify Web API](https://developer.spotify.com/documentation/web-api/reference/#/). For Spotify authentication, it uses [Implicit Grant Flow](https://developer.spotify.com/documentation/general/guides/authorization/implicit-grant/). The application is made mostly with [Material UI](https://mui.com/) components.
+A collection of stuff I did with [Spotify Web API](https://developer.spotify.com/documentation/web-api/reference/#/). For Spotify authentication, it uses [Implicit Grant Flow](https://developer.spotify.com/documentation/general/guides/authorization/implicit-grant/). The application is made mostly with [Material UI](https://mui.com/) components. This is also my first actual React project 👶
 
 - **SpotiDiff**: Compare your playlists to some other user's based on track IDs.
 - **SpotiFind**: See if you have added a song to any one of your playlists.
@@ -14,8 +14,5 @@ UI design (to be) made in [Penpot](https://penpot.app/).
 - Better error handling (with components). Also check status code of requests.
 - Implement tests
 - Go back to menu after logout!
-- Add audio features to spotipeek
-- Can move nulls to states only, not type
-- Table scrollable and styling in SpotiDiff
 - Spotipeek loading screen bug!
 - Add theme

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 // user imports
-import Header from "./Header";
-import AppMenu from "./AppMenu";
+import MainMenu from "./MainMenu";
 import { AuthContext, loggedOutAuthInfo, AuthInfo } from "./context/auth";
 
 // used to obtain the token from spotify redirection
@@ -37,8 +36,7 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ authInfo, setAuthInfo }}>
-      <Header />
-      <AppMenu />
+      <MainMenu />
     </AuthContext.Provider>
   );
 }

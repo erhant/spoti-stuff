@@ -8,7 +8,7 @@ import { AuthContext, loggedOutAuthInfo } from "./context/auth";
 
 export default function LoginButton() {
   const { authInfo, setAuthInfo } = useContext(AuthContext);
-  const [user, setUser] = useState<spotify.User>(null);
+  const [user, setUser] = useState<spotify.User | null>(null);
   const handleLogout = () => {
     setAuthInfo(loggedOutAuthInfo);
     window.sessionStorage.removeItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!);
