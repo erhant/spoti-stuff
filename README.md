@@ -18,3 +18,4 @@ UI design (to be) made in [Penpot](https://penpot.app/).
 - Can move nulls to states only, not type
 - Table scrollable and styling in SpotiDiff
 - Spotipeek loading screen bug!
+- Add theme

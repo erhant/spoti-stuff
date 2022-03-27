@@ -14,7 +14,7 @@ const SONGLINK_REGEX: RegExp = new RegExp(
 export default function SpotiFind() {
   const { authInfo } = useContext(AuthContext);
   const [trackText, setTrackText] = useState<string>(DEFAULT_SONGLINK);
-  const [trackTextError, setTrackTextError] = useState<string>("");
+  const [trackTextError, setTrackTextError] = useState("");
   const [progressState, setProgressState] = useState<spotify.ProgressState>(null);
   const [trackState, setTrackState] = useState<spotify.TrackInfo>(null);
   const [matchesState, setMatchesState] = useState<spotify.PlaylistInfo[] | null>(null);
@@ -24,11 +24,15 @@ export default function SpotiFind() {
       return;
     }
 
+    setTrackTextError("");
     setProgressState(null);
     setTrackState(null);
     setMatchesState(null);
+
+    // parse track string to obtain track id, it is the string between furthest '/' and the '?'
+    const targetTrackID: string = trackText.split("?")[0].split("/").at(-1)!;
     spotify
-      .findTrackInUserPlaylists(authInfo.accessToken, trackText, setProgressState, setTrackState)
+      .findTrackInUserPlaylists(authInfo.accessToken, targetTrackID, setProgressState, setTrackState)
       .then((matches) => setMatchesState(matches));
   };
 

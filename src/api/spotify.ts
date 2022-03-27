@@ -87,7 +87,6 @@ export async function getCurrentUser(accessToken: string): Promise<User> {
     },
   });
   res = await res.json();
-  console.log(res);
   return {
     name: res.display_name,
     id: res.id,
@@ -112,7 +111,7 @@ export async function getUser(accessToken: string, userID: string): Promise<User
     },
   });
   res = await res.json();
-  console.log(res);
+  // console.log(res);
 
   return {
     name: res.display_name,
@@ -191,12 +190,11 @@ export async function getTrack(accessToken: string, trackID: string): Promise<Tr
 
 export async function findTrackInUserPlaylists(
   accessToken: string,
-  trackStr: string,
+  targetTrackID: string,
   setProgressState: (state: ProgressState) => void,
   setTrackState: (state: TrackInfo) => void
 ): Promise<PlaylistInfo[]> {
   // get track info
-  const targetTrackID: string = trackStr.split("?")[0].split("/").at(-1)!; // parse track string to obtain track id, it is the string between furthest '/' and the '?'
   const trackInfo: TrackInfo = await getTrack(accessToken, targetTrackID);
   // update model track
   setTrackState(trackInfo);
