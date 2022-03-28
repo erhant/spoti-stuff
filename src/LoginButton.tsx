@@ -4,13 +4,16 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 // user imports
 import * as spotify from "./api/spotify";
+import { User } from "./types/spotify";
+import { AppSelection, SetAppSelection } from "./types/mainmenu";
 import { AuthContext, loggedOutAuthInfo } from "./context/auth";
 
-export default function LoginButton() {
+export default function LoginButton({ sel, setSel }: { sel: AppSelection; setSel: SetAppSelection }) {
   const { authInfo, setAuthInfo } = useContext(AuthContext);
-  const [user, setUser] = useState<spotify.User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const handleLogout = () => {
     setAuthInfo(loggedOutAuthInfo);
+    setSel(AppSelection.None);
     window.sessionStorage.removeItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!);
   };
 

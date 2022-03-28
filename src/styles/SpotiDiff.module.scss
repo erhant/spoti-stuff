@@ -1,3 +1,9 @@
+$rad: 5em;
+.container {
+  padding: calc($rad / 2);
+  text-align: center;
+}
+
 .matchedRecord {
   background-color: lightgreen;
   font-weight: bold;

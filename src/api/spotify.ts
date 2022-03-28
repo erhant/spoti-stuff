@@ -1,56 +1,4 @@
-export type User = {
-  name: string;
-  id: string;
-  externalURL: string;
-  imageURL: string;
-};
-export type PlaylistInfo = {
-  name: string;
-  numTracks: number;
-  href: string;
-  playlistCover: string;
-  id: string;
-};
-export type TrackInfo = {
-  album: {
-    name: string;
-    year: string;
-    id: string;
-    imageURL: string;
-    externalURL: string;
-  };
-  artist: {
-    name: string;
-    id: string;
-    externalURL: string;
-  };
-  name: string;
-  id: string;
-  externalURL: string;
-};
-export type ShortTrackInfo = {
-  name: string;
-  id: string;
-  artistName: string;
-  albumName: string;
-};
-export type ProgressState = {
-  numPlaylists: number;
-  donePlaylists: number;
-  currentPlaylist: PlaylistInfo;
-};
-export type TrackAudioFeatures = {
-  trackID: string;
-  acousticness: number;
-  danceability: number;
-  energy: number;
-  instrumentalness: number;
-  key: number; // C=0, C#=1, D=2, ...
-  liveness: number;
-  loudness: number;
-  speechiness: number;
-  valence: number;
-};
+import { User, TrackInfo, PlaylistInfo, ShortTrackInfo, TrackAudioFeatures } from "../types/spotify";
 
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const REDIRECT_URI = "http://localhost:3000";
@@ -120,10 +68,10 @@ export async function getUser(accessToken: string, userID: string): Promise<User
 }
 
 /**
- * https://developer.spotify.com/console/get-users-currently-playing-track/
+ * Get the currently playing track.
+ * @link https://developer.spotify.com/console/get-users-currently-playing-track/
  *
  * @param {string} accessToken
- * @return {TrackInfo} track
  */
 export async function getCurrentlyPlayingTrack(accessToken: string): Promise<TrackInfo> {
   let res;
@@ -155,6 +103,14 @@ export async function getCurrentlyPlayingTrack(accessToken: string): Promise<Tra
     externalURL: res.item.external_urls.spotify,
   };
 }
+
+/**
+ * Get a track information.
+ * @link https://developer.spotify.com/console/get-track/
+ *
+ * @param {string} accessToken
+ * @param {string} trackID
+ */
 export async function getTrack(accessToken: string, trackID: string): Promise<TrackInfo> {
   let res;
   res = await fetch("https://api.spotify.com/v1/tracks/" + trackID, {
@@ -187,49 +143,8 @@ export async function getTrack(accessToken: string, trackID: string): Promise<Tr
 }
 
 /**
- * Find if a track exists in any of the user's playlists.
- * Updates the trackState and progressState to show progress.
-
- * @param {string} accessToken
- * @param {string} targetTrackID
- * @param setProgressState
- * @param {(state: TrackInfo) => void} etTrackState
- */
-export async function findTrackInUserPlaylists(
-  accessToken: string,
-  targetTrackID: string,
-  setProgressState: (state: ProgressState) => void,
-  setTrackState: (state: TrackInfo) => void
-): Promise<PlaylistInfo[]> {
-  // get track info
-  const trackInfo: TrackInfo = await getTrack(accessToken, targetTrackID);
-  // update model track
-  setTrackState(trackInfo);
-  // console.log("Searching for", trackInfo);
-
-  const playlists = await getCurrentUserPlaylists(accessToken);
-  // console.log(playlists);
-
-  // search the track in eachplaylist
-  const matchedPlaylists: PlaylistInfo[] = [];
-  for (let i = 0; i < playlists.length; ++i) {
-    // update model progress
-    setProgressState({
-      numPlaylists: playlists.length,
-      donePlaylists: i + 1,
-      currentPlaylist: playlists[i],
-    });
-    const trackIDs: string[] = await getTrackIDsInPlaylist(accessToken, playlists[i]!.id);
-    if (trackIDs.includes(targetTrackID)) {
-      matchedPlaylists.push(playlists[i]);
-    }
-  }
-
-  return matchedPlaylists;
-}
-
-/**
  * Get playlists of the bearer of access token.
+ * @link https://developer.spotify.com/console/get-current-user-playlists/
  *
  * @param {string} accessToken
  */

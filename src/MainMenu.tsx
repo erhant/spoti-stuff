@@ -1,23 +1,16 @@
 import React, { useState } from "react";
-import { Button, Typography, Fab } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import SafetyDividerIcon from "@mui/icons-material/SafetyDivider";
 import SearchIcon from "@mui/icons-material/Search";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 // user imports
 import Header from "./Header";
 import SpotiPeek from "./SpotiPeek";
 import SpotiFind from "./SpotiFind";
 import SpotiDiff from "./SpotiDiff";
 import { AuthContext } from "./context/auth";
+import { AppSelection } from "./types/mainmenu";
 import styles from "./styles/MainMenu.module.scss";
-
-enum AppSelection {
-  None = 0,
-  Diff = 1,
-  Find = 2,
-  Peek = 3,
-}
 
 function AppButton({
   selection,
@@ -55,22 +48,10 @@ function AppButton({
 
 export default function MainMenu() {
   const [appSel, setAppSel] = useState(AppSelection.None);
-  const handleReturnClick = () => setAppSel(AppSelection.None);
 
   return (
     <div>
-      <Header />
-      {
-        /* Render the return button if not in menu */
-        appSel === AppSelection.None ? (
-          <></>
-        ) : (
-          <Fab variant="extended" color="primary" className={styles.returnButton} onClick={handleReturnClick}>
-            <ArrowLeftIcon sx={{ mr: 1 }} />
-            Back
-          </Fab>
-        )
-      }
+      <Header sel={appSel} setSel={setAppSel} />
       {
         /* Render the menu or component */
         {
