@@ -39,7 +39,9 @@ export default function SpotiDiff() {
   const [myPlaylists, setMyPlaylists] = useState<spotify.PlaylistInfo[] | null>(null);
   const [mySelectedPlaylistValue, setMySelectedPlaylistValue] = useState("");
   const [myPlaylistTracks, setMyPlaylistTracks] = useState<ShortInfoWithMatch[]>([]);
-  const handleMyPlaylistChange = (e: SelectChangeEvent) => setMySelectedPlaylistValue(e.target.value);
+  const handleMyPlaylistChange = (e: SelectChangeEvent) => {
+    if (myPlaylists) setMySelectedPlaylistValue(e.target.value);
+  };
 
   // pair user
   const [targetPairText, setTargetPairText] = useState(DEFAULT_PAIRLINK);
@@ -70,7 +72,8 @@ export default function SpotiDiff() {
   const [pairPlaylistTracks, setPairPlaylistTracks] = useState<ShortInfoWithMatch[]>([]);
   const handlePairPlaylistChange = (e: SelectChangeEvent) => setPairSelectedPlaylistValue(e.target.value);
 
-  const [isMatchingTracks, setIsMatchingTracks] = useState(true);
+  const [matchingTrackIDs, setMatchingTracksIDs] = useState<string[]>([]);
+  const [isMatchingTracks, setIsMatchingTracks] = useState(false);
 
   function SelectionBox({
     playlists,
@@ -88,7 +91,7 @@ export default function SpotiDiff() {
         <InputLabel>{label}</InputLabel>
         <Select value={selection} onChange={changeHandler} variant="standard">
           {playlists.map((pl: spotify.PlaylistInfo, i: number) => (
-            <MenuItem key={i} value={pl.id}>
+            <MenuItem key={i} value={i}>
               {pl.name}
             </MenuItem>
           ))}
@@ -101,11 +104,9 @@ export default function SpotiDiff() {
 
   function TracksTable({ tracks }: { tracks: ShortInfoWithMatch[] }) {
     // no tracks uploaded for this table yet
-    if (tracks.length === 0) {
-      return <></>;
-    }
+    if (tracks.length === 0) return <></>;
     // tracks are in, but they are being matched right now
-    if (isMatchingTracks) {
+    else if (isMatchingTracks)
       return (
         <Stack spacing={1}>
           <Skeleton animation="wave" />
@@ -113,30 +114,33 @@ export default function SpotiDiff() {
           <Skeleton animation="wave" />
         </Stack>
       );
-    }
     // mathcing is done, tracks are ready!
-    return (
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }}>
-          <TableHead>
-            <TableRow>
-              {["Name", "Artist", "Album"].map((s: string, i) => (
-                <TableCell key={i}>{s}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tracks.map((track, i) => (
-              <TableRow key={i} className={track.match ? styles.matchedRecord : styles.unmatchedRecord}>
-                <TableCell size="small">{track.name}</TableCell>
-                <TableCell size="small">{track.artistName}</TableCell>
-                <TableCell size="small">{track.albumName}</TableCell>
+    else
+      return (
+        <TableContainer>
+          <Table sx={{ maxWidth: "100%" }}>
+            <TableHead>
+              <TableRow>
+                {["Name", "Artist", "Album"].map((s: string, i) => (
+                  <TableCell key={i}>{s}</TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    );
+            </TableHead>
+            <TableBody>
+              {tracks.map((track, i) => (
+                <TableRow
+                  key={i}
+                  className={matchingTrackIDs.includes(track.id) ? styles.matchedRecord : styles.unmatchedRecord}
+                >
+                  <TableCell size="small">{track.name}</TableCell>
+                  <TableCell size="small">{track.artistName}</TableCell>
+                  <TableCell size="small">{track.albumName}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      );
   }
 
   // new pair is given
@@ -151,6 +155,7 @@ export default function SpotiDiff() {
   useEffect(() => {
     if (myPlaylists && mySelectedPlaylistValue !== "") {
       const pl: spotify.PlaylistInfo = myPlaylists[parseInt(mySelectedPlaylistValue)];
+      console.log(`Selected ${parseInt(mySelectedPlaylistValue)}`, pl);
       spotify.getTrackShortInfosInPlaylist(authInfo.accessToken, pl.id).then((tinfos) => {
         setMyPlaylistTracks(tinfos);
       });
@@ -161,6 +166,7 @@ export default function SpotiDiff() {
   useEffect(() => {
     if (pairPlaylists && pairSelectedPlaylistValue !== "") {
       const pl: spotify.PlaylistInfo = pairPlaylists[parseInt(pairSelectedPlaylistValue)];
+      console.log(`Selected ${parseInt(mySelectedPlaylistValue)}`, pl);
       spotify.getTrackShortInfosInPlaylist(authInfo.accessToken, pl.id).then((tinfos) => {
         setPairPlaylistTracks(tinfos);
       });
@@ -170,22 +176,25 @@ export default function SpotiDiff() {
   // match tracks
   useEffect(() => {
     if (myPlaylistTracks.length > 0 && pairPlaylistTracks.length > 0) {
+      console.log("Matching tracks...");
       setIsMatchingTracks(true);
       const myTrackIDS = myPlaylistTracks.map((t: any) => t.id);
       const pairTrackIDS = pairPlaylistTracks.map((t: any) => t.id);
       // mark the intersecting arrays as matched
       let i;
       let j;
+      const matches: string[] = [];
       for (i = 0; i < myTrackIDS.length; ++i) {
         j = pairTrackIDS.indexOf(myTrackIDS[i]);
         if (j !== -1) {
-          myPlaylistTracks[i].match = true;
-          pairPlaylistTracks[j].match = true;
+          matches.push(myTrackIDS[i]);
         }
       }
       setIsMatchingTracks(false);
+      setMatchingTracksIDs(matches);
+      console.log("Done, found", matches.length, "matches!");
     }
-  }, [JSON.stringify(myPlaylistTracks), JSON.stringify(pairPlaylistTracks)]);
+  }, [myPlaylistTracks, pairPlaylistTracks]);
 
   // compoundDidMount
   useEffect(() => {
@@ -201,7 +210,14 @@ export default function SpotiDiff() {
             <Typography
               variant="h5"
               component="a"
-              style={{ textDecoration: "none", color: "inherit", width: "100%", height: "100%", flexGrow: 1 }}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                width: "100%",
+                height: "100%",
+                flexGrow: 1,
+                textAlign: "end",
+              }}
             >
               {pair.name}
             </Typography>

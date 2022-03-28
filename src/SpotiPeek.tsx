@@ -66,7 +66,7 @@ export default function SpotiPeek() {
                     speechiness: trackFeatures.speechiness,
                     valence: trackFeatures.valence,
                   },
-                  meta: { color: "#58FCEC" },
+                  meta: { color: "green" },
                 },
               ]}
               size={400}
