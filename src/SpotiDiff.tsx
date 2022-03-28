@@ -29,16 +29,13 @@ import styles from "./styles/SpotiDiff.module.scss";
 const DEFAULT_PAIRLINK: string = "https://open.spotify.com/user/erhany?si=7b0cebf257c34ce8";
 const PAIRLINK_REGEX: RegExp = new RegExp(/^https:\/\/open.spotify.com\/user\/[0-9a-zA-Z]+\?si=[0-9a-zA-Z]{16}$/, "gs");
 
-// Type for tracks, match is true if tracks exists on both sides
-type ShortInfoWithMatch = spotify.ShortTrackInfo & { match?: boolean };
-
 export default function SpotiDiff() {
   const { authInfo } = useContext(AuthContext);
 
   // my playlists, the selected one and its tracks
   const [myPlaylists, setMyPlaylists] = useState<spotify.PlaylistInfo[] | null>(null);
   const [mySelectedPlaylistValue, setMySelectedPlaylistValue] = useState("");
-  const [myPlaylistTracks, setMyPlaylistTracks] = useState<ShortInfoWithMatch[]>([]);
+  const [myPlaylistTracks, setMyPlaylistTracks] = useState<spotify.ShortTrackInfo[]>([]);
   const handleMyPlaylistChange = (e: SelectChangeEvent) => {
     if (myPlaylists) setMySelectedPlaylistValue(e.target.value);
   };
@@ -69,11 +66,10 @@ export default function SpotiDiff() {
   // pair user's playlists
   const [pairPlaylists, setPairPlaylists] = useState<spotify.PlaylistInfo[] | null>(null);
   const [pairSelectedPlaylistValue, setPairSelectedPlaylistValue] = useState("");
-  const [pairPlaylistTracks, setPairPlaylistTracks] = useState<ShortInfoWithMatch[]>([]);
+  const [pairPlaylistTracks, setPairPlaylistTracks] = useState<spotify.ShortTrackInfo[]>([]);
   const handlePairPlaylistChange = (e: SelectChangeEvent) => setPairSelectedPlaylistValue(e.target.value);
 
   const [matchingTrackIDs, setMatchingTracksIDs] = useState<string[]>([]);
-  const [isMatchingTracks, setIsMatchingTracks] = useState(false);
 
   function SelectionBox({
     playlists,
@@ -98,15 +94,15 @@ export default function SpotiDiff() {
         </Select>
       </FormControl>
     ) : (
-      <></>
+      <Skeleton animation="wave" sx={{ height: "100%" }} />
     );
   }
 
-  function TracksTable({ tracks }: { tracks: ShortInfoWithMatch[] }) {
+  function TracksTable({ tracks }: { tracks: spotify.ShortTrackInfo[] }) {
     // no tracks uploaded for this table yet
     if (tracks.length === 0) return <></>;
     // tracks are in, but they are being matched right now
-    else if (isMatchingTracks)
+    /* else if (isMatchingTracks)
       return (
         <Stack spacing={1}>
           <Skeleton animation="wave" />
@@ -114,6 +110,7 @@ export default function SpotiDiff() {
           <Skeleton animation="wave" />
         </Stack>
       );
+    */
     // mathcing is done, tracks are ready!
     else
       return (
@@ -177,7 +174,6 @@ export default function SpotiDiff() {
   useEffect(() => {
     if (myPlaylistTracks.length > 0 && pairPlaylistTracks.length > 0) {
       console.log("Matching tracks...");
-      setIsMatchingTracks(true);
       const myTrackIDS = myPlaylistTracks.map((t: any) => t.id);
       const pairTrackIDS = pairPlaylistTracks.map((t: any) => t.id);
       // mark the intersecting arrays as matched
@@ -190,7 +186,6 @@ export default function SpotiDiff() {
           matches.push(myTrackIDS[i]);
         }
       }
-      setIsMatchingTracks(false);
       setMatchingTracksIDs(matches);
       console.log("Done, found", matches.length, "matches!");
     }

@@ -16,3 +16,4 @@ UI design (to be) made in [Penpot](https://penpot.app/).
 - Go back to menu after logout!
 - Spotipeek loading screen bug!
 - Add theme
+- Move progressState to spotifind, it should not be a part of spotify.ts

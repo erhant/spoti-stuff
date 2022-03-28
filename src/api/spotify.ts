@@ -186,6 +186,15 @@ export async function getTrack(accessToken: string, trackID: string): Promise<Tr
   };
 }
 
+/**
+ * Find if a track exists in any of the user's playlists.
+ * Updates the trackState and progressState to show progress.
+
+ * @param {string} accessToken
+ * @param {string} targetTrackID
+ * @param setProgressState
+ * @param {(state: TrackInfo) => void} etTrackState
+ */
 export async function findTrackInUserPlaylists(
   accessToken: string,
   targetTrackID: string,
@@ -219,6 +228,11 @@ export async function findTrackInUserPlaylists(
   return matchedPlaylists;
 }
 
+/**
+ * Get playlists of the bearer of access token.
+ *
+ * @param {string} accessToken
+ */
 export async function getCurrentUserPlaylists(accessToken: string): Promise<PlaylistInfo[]> {
   let playlists: PlaylistInfo[] = [];
   let nextURL: string | null =
@@ -249,6 +263,14 @@ export async function getCurrentUserPlaylists(accessToken: string): Promise<Play
 
   return playlists;
 }
+
+/**
+ * Gets the playlists of a user.
+ * @link https://developer.spotify.com/console/get-playlists/
+ *
+ * @param {string} accessToken
+ * @param {string} userID
+ */
 export async function getUserPlaylists(accessToken: string, userID: string): Promise<PlaylistInfo[]> {
   let playlists: PlaylistInfo[] = [];
   let nextURL: string | null =
@@ -283,9 +305,9 @@ export async function getUserPlaylists(accessToken: string, userID: string): Pro
 }
 
 /**
- * https://developer.spotify.com/console/get-playlist-tracks/
- *
- * Only retrieve trackIDs for faster requests.
+ * Retrieves all track IDs in a playlist. This is done for performance reasons.
+ * @link https://developer.spotify.com/console/get-playlist-tracks/
+ * @see getTrackShortInfosInPlaylist for more detailed track retrieval.
  *
  * @param {string} accessToken
  * @param {string} playlistID
@@ -314,6 +336,8 @@ export async function getTrackIDsInPlaylist(accessToken: string, playlistID: str
 
 /**
  * https://developer.spotify.com/console/get-playlist-tracks/
+ *
+ * Retrieves all tracks in a playlist.
  *
  * @param {string} accessToken
  * @param {string} playlistID
@@ -354,6 +378,8 @@ export async function getTrackShortInfosInPlaylist(accessToken: string, playlist
 
 /**
  * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-several-audio-features
+ *
+ * Retrieves the audio features of a given track.
  *
  * @param {string} accessToken
  * @param {string} trackID
