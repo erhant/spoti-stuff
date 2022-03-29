@@ -6,12 +6,12 @@ A collection of stuff I did with [Spotify Web API](https://developer.spotify.com
 - **SpotiFind**: See if you have added a song to any one of your playlists.
 - **SpotiPeek**: Get audio features for the song that you are currently playing.
 
-UI design (to be) made in [Penpot](https://penpot.app/).
+A rough-and-rushed UI design made in [Penpot](https://penpot.app/) is as given below.
+
+![ui](./misc/rough-ui.png)
 
 ## ToDos
 
 - Better error handling (with components). Also check status code of requests.
 - Implement tests
-- Spotipeek loading screen bug!
 - Add theme
-- Move progressState to spotifind, it should not be a part of spotify.ts

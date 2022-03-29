@@ -1,19 +1,18 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Avatar, Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 // user imports
 import * as spotify from "./api/spotify";
 import { User } from "./types/spotify";
-import { AppSelection, SetAppSelection } from "./types/mainmenu";
 import { AuthContext, loggedOutAuthInfo } from "./context/auth";
 
-export default function LoginButton({ sel, setSel }: { sel: AppSelection; setSel: SetAppSelection }) {
+export default function LoginButton({ backToMainMenuHandler }: { backToMainMenuHandler: () => void }) {
   const { authInfo, setAuthInfo } = useContext(AuthContext);
   const [user, setUser] = useState<User | null>(null);
   const handleLogout = () => {
     setAuthInfo(loggedOutAuthInfo);
-    setSel(AppSelection.None);
+    backToMainMenuHandler();
     window.sessionStorage.removeItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!);
   };
 
@@ -40,22 +39,20 @@ export default function LoginButton({ sel, setSel }: { sel: AppSelection; setSel
 
   return authInfo.isAuthenticated ? (
     <div>
-      {user ? (
-        <>
-          <span>
-            Welcome {user!.name}
-            {/* <Avatar alt="user pic" src={user!.imageURL} sx={{}} /> */}
-          </span>
-        </>
-      ) : (
-        <></>
+      {user && (
+        <Typography
+          variant="h5"
+          style={{ textDecoration: "none", color: "inherit", display: "inline", textAlign: "right" }}
+        >
+          Welcome, {user!.name}
+        </Typography>
       )}
       <Button color="inherit" onClick={handleLogout} sx={{ ml: "2em" }} startIcon={<LogoutIcon />}>
         Logout
       </Button>
     </div>
   ) : (
-    <Button color="inherit" href={spotify.LOGIN_URL} startIcon={<LoginIcon />}>
+    <Button color="inherit" href={spotify.AUTHENTICATION_HREF} startIcon={<LoginIcon />}>
       Login
     </Button>
   );

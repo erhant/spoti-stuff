@@ -9,8 +9,14 @@ import SpotiPeek from "./SpotiPeek";
 import SpotiFind from "./SpotiFind";
 import SpotiDiff from "./SpotiDiff";
 import { AuthContext } from "./context/auth";
-import { AppSelection } from "./types/mainmenu";
 import styles from "./styles/MainMenu.module.scss";
+
+enum AppSelection {
+  None = 0,
+  Diff = 1,
+  Find = 2,
+  Peek = 3,
+}
 
 function AppButton({
   selection,
@@ -48,10 +54,11 @@ function AppButton({
 
 export default function MainMenu() {
   const [appSel, setAppSel] = useState(AppSelection.None);
+  const backToMainMenuHandler = () => setAppSel(AppSelection.None);
 
   return (
     <div>
-      <Header sel={appSel} setSel={setAppSel} />
+      <Header isInMainMenu={appSel === AppSelection.None} backToMainMenuHandler={backToMainMenuHandler} />
       {
         /* Render the menu or component */
         {

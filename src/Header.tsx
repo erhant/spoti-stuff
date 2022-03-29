@@ -1,11 +1,10 @@
 import * as React from "react";
-import { AppBar, Toolbar, Typography, Container, Fab } from "@mui/material";
+import { AppBar, Toolbar, Typography, Container } from "@mui/material";
 // user imports
 import styles from "./styles/Header.module.scss";
 import LoginButton from "./LoginButton";
-import { AppSelection, SetAppSelection } from "./types/mainmenu";
 
-function Header({ sel, setSel }: { sel: AppSelection; setSel: SetAppSelection }) {
+function Header({ isInMainMenu, backToMainMenuHandler }: { isInMainMenu: boolean; backToMainMenuHandler: () => void }) {
   return (
     <header>
       <AppBar position="static">
@@ -16,14 +15,12 @@ function Header({ sel, setSel }: { sel: AppSelection; setSel: SetAppSelection })
             </Typography>
             {
               /* Render the return button if not in menu */
-              sel === AppSelection.None ? (
-                <></>
-              ) : (
+              !isInMainMenu && (
                 <Typography
                   component="a"
-                  onClick={() => setSel(AppSelection.None)}
+                  onClick={backToMainMenuHandler}
                   variant="h5"
-                  style={{ textDecoration: "none", color: "inherit", marginLeft: "1em" }}
+                  style={{ textDecoration: "underline", color: "inherit", marginLeft: "1em" }}
                 >
                   Main Menu
                 </Typography>
@@ -31,7 +28,7 @@ function Header({ sel, setSel }: { sel: AppSelection; setSel: SetAppSelection })
             }
             {/* empty component to push button to the right*/}
             <span style={{ flexGrow: 1 }}></span>
-            <LoginButton sel={sel} setSel={setSel} />
+            <LoginButton backToMainMenuHandler={backToMainMenuHandler} />
           </Toolbar>
         </Container>
       </AppBar>
