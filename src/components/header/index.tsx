@@ -1,10 +1,16 @@
 import * as React from "react";
 import { AppBar, Toolbar, Typography, Container } from "@mui/material";
 // user imports
-import styles from "./styles/Header.module.scss";
-import LoginButton from "./LoginButton";
+import styles from ".style.module.scss";
+import LoginButton from "../loginButton";
 
-function Header({ isInMainMenu, backToMainMenuHandler }: { isInMainMenu: boolean; backToMainMenuHandler: () => void }) {
+export default function Header({
+  isInMainMenu,
+  backToMainMenuHandler,
+}: {
+  isInMainMenu: boolean;
+  backToMainMenuHandler: () => void;
+}) {
   return (
     <header>
       <AppBar position="static">
@@ -35,5 +41,3 @@ function Header({ isInMainMenu, backToMainMenuHandler }: { isInMainMenu: boolean
     </header>
   );
 }
-
-export default Header;

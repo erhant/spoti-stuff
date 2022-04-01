@@ -2,16 +2,15 @@ import React, { useEffect, useState, useContext } from "react";
 import { Container, LinearProgress } from "@mui/material";
 import RadarChart from "react-svg-radar-chart";
 import "react-svg-radar-chart/build/css/index.css";
-import styles from "./styles/SpotiPeek.module.scss";
-import * as spotify from "./api/spotify";
-import { TrackAudioFeatures, TrackInfo } from "./types/spotify";
-import { AuthContext } from "./context/auth";
+import styles from "./style.module.scss";
+import * as spotify from "../../api/spotify";
+import { AuthContext } from "../../context/auth";
 
 export default function SpotiPeek() {
   const { authInfo } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
-  const [playingTrack, setPlayingTrack] = useState<TrackInfo | null>(null);
-  const [trackFeatures, setTrackFeatures] = useState<TrackAudioFeatures | null>(null);
+  const [playingTrack, setPlayingTrack] = useState<spotify.TrackInfo | null>(null);
+  const [trackFeatures, setTrackFeatures] = useState<spotify.TrackAudioFeatures | null>(null);
 
   useEffect(() => {
     let active = true;

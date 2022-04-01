@@ -3,13 +3,12 @@ import { Button, Typography } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 // user imports
-import * as spotify from "./api/spotify";
-import { User } from "./types/spotify";
-import { AuthContext, loggedOutAuthInfo } from "./context/auth";
+import * as spotify from "../../api/spotify";
+import { AuthContext, loggedOutAuthInfo } from "../../context/auth";
 
 export default function LoginButton({ backToMainMenuHandler }: { backToMainMenuHandler: () => void }) {
   const { authInfo, setAuthInfo } = useContext(AuthContext);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<spotify.User | null>(null);
   const handleLogout = () => {
     setAuthInfo(loggedOutAuthInfo);
     backToMainMenuHandler();

@@ -22,10 +22,9 @@ import {
   InputLabel,
   SelectChangeEvent,
 } from "@mui/material";
-import * as spotify from "./api/spotify";
-import { AuthContext } from "./context/auth";
-import { PlaylistInfo, ShortTrackInfo, User } from "./types/spotify";
-import styles from "./styles/SpotiDiff.module.scss";
+import * as spotify from "../../api/spotify";
+import { AuthContext } from "../../context/auth";
+import styles from "./style.module.scss";
 
 const DEFAULT_PAIRLINK: string = "https://open.spotify.com/user/erhany?si=7b0cebf257c34ce8";
 const PAIRLINK_REGEX: RegExp = new RegExp(/^https:\/\/open.spotify.com\/user\/[0-9a-zA-Z]+\?si=[0-9a-zA-Z]{16}$/, "gs");
@@ -34,9 +33,9 @@ export default function SpotiDiff() {
   const { authInfo } = useContext(AuthContext);
 
   // my playlists, the selected one and its tracks
-  const [myPlaylists, setMyPlaylists] = useState<PlaylistInfo[] | null>(null);
+  const [myPlaylists, setMyPlaylists] = useState<spotify.PlaylistInfo[] | null>(null);
   const [mySelectedPlaylistValue, setMySelectedPlaylistValue] = useState("");
-  const [myPlaylistTracks, setMyPlaylistTracks] = useState<ShortTrackInfo[]>([]);
+  const [myPlaylistTracks, setMyPlaylistTracks] = useState<spotify.ShortTrackInfo[]>([]);
   const handleMyPlaylistChange = (e: SelectChangeEvent) => {
     if (myPlaylists) setMySelectedPlaylistValue(e.target.value);
   };
@@ -44,7 +43,7 @@ export default function SpotiDiff() {
   // pair user
   const [targetPairText, setTargetPairText] = useState(DEFAULT_PAIRLINK);
   const [targetPairTextTextError, setTargetPairTextError] = useState("");
-  const [pair, setPair] = useState<User | null>(null);
+  const [pair, setPair] = useState<spotify.User | null>(null);
   const handleAddPair = () => {
     if (!PAIRLINK_REGEX.test(targetPairText)) {
       setTargetPairTextError("Your input is not a Spotify profile URL!");
@@ -65,9 +64,9 @@ export default function SpotiDiff() {
   };
 
   // pair user's playlists
-  const [pairPlaylists, setPairPlaylists] = useState<PlaylistInfo[] | null>(null);
+  const [pairPlaylists, setPairPlaylists] = useState<spotify.PlaylistInfo[] | null>(null);
   const [pairSelectedPlaylistValue, setPairSelectedPlaylistValue] = useState("");
-  const [pairPlaylistTracks, setPairPlaylistTracks] = useState<ShortTrackInfo[]>([]);
+  const [pairPlaylistTracks, setPairPlaylistTracks] = useState<spotify.ShortTrackInfo[]>([]);
   const handlePairPlaylistChange = (e: SelectChangeEvent) => setPairSelectedPlaylistValue(e.target.value);
 
   const [matchingTrackIDs, setMatchingTracksIDs] = useState<string[]>([]);
@@ -78,7 +77,7 @@ export default function SpotiDiff() {
     selection,
     changeHandler,
   }: {
-    playlists: PlaylistInfo[] | null;
+    playlists: spotify.PlaylistInfo[] | null;
     label: string;
     selection: string;
     changeHandler: (e: SelectChangeEvent) => void;
@@ -87,7 +86,7 @@ export default function SpotiDiff() {
       <FormControl fullWidth>
         <InputLabel>{label}</InputLabel>
         <Select value={selection} onChange={changeHandler} variant="standard">
-          {playlists.map((pl: PlaylistInfo, i: number) => (
+          {playlists.map((pl: spotify.PlaylistInfo, i: number) => (
             <MenuItem key={i} value={i}>
               {pl.name}
             </MenuItem>
@@ -99,7 +98,7 @@ export default function SpotiDiff() {
     );
   }
 
-  function TracksTable({ tracks }: { tracks: ShortTrackInfo[] }) {
+  function TracksTable({ tracks }: { tracks: spotify.ShortTrackInfo[] }) {
     // no tracks uploaded for this table yet
     if (tracks.length === 0) return <></>;
     // tracks are in, but they are being matched right now
@@ -152,7 +151,7 @@ export default function SpotiDiff() {
   // update my tracks
   useEffect(() => {
     if (myPlaylists && mySelectedPlaylistValue !== "") {
-      const pl: PlaylistInfo = myPlaylists[parseInt(mySelectedPlaylistValue)];
+      const pl: spotify.PlaylistInfo = myPlaylists[parseInt(mySelectedPlaylistValue)];
       console.log(`Selected ${parseInt(mySelectedPlaylistValue)}`, pl);
       spotify.getTrackShortInfosInPlaylist(authInfo.accessToken, pl.id).then((tinfos) => {
         setMyPlaylistTracks(tinfos);
@@ -163,7 +162,7 @@ export default function SpotiDiff() {
   // update pair tracks
   useEffect(() => {
     if (pairPlaylists && pairSelectedPlaylistValue !== "") {
-      const pl: PlaylistInfo = pairPlaylists[parseInt(pairSelectedPlaylistValue)];
+      const pl: spotify.PlaylistInfo = pairPlaylists[parseInt(pairSelectedPlaylistValue)];
       console.log(`Selected ${parseInt(mySelectedPlaylistValue)}`, pl);
       spotify.getTrackShortInfosInPlaylist(authInfo.accessToken, pl.id).then((tinfos) => {
         setPairPlaylistTracks(tinfos);
@@ -264,7 +263,7 @@ export default function SpotiDiff() {
               playlists={pairPlaylists}
               selection={pairSelectedPlaylistValue}
               changeHandler={handlePairPlaylistChange}
-              label="Other User's Playlists"
+              label="Other spotify.User's Playlists"
             />
           ) : (
             <FormControl fullWidth>

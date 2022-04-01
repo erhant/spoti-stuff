@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // user imports
-import MainMenu from "./MainMenu";
+import MainMenu from "./components/mainmenu";
 import { AuthContext, loggedOutAuthInfo, AuthInfo } from "./context/auth";
 
 // used to obtain the token from spotify redirection

@@ -4,12 +4,12 @@ import SafetyDividerIcon from "@mui/icons-material/SafetyDivider";
 import SearchIcon from "@mui/icons-material/Search";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 // user imports
-import Header from "./Header";
-import SpotiPeek from "./SpotiPeek";
-import SpotiFind from "./SpotiFind";
-import SpotiDiff from "./SpotiDiff";
-import { AuthContext } from "./context/auth";
-import styles from "./styles/MainMenu.module.scss";
+import Header from "../header";
+import SpotiPeek from "../spotipeek";
+import SpotiFind from "../spotifind";
+import SpotiDiff from "../spotidiff";
+import { AuthContext } from "../../context/auth";
+import styles from "./style.module.scss";
 
 enum AppSelection {
   None = 0,

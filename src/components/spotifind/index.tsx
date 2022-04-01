@@ -1,10 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Container, LinearProgress, TextField, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import styles from "./styles/SpotiFind.module.scss";
-import * as spotify from "./api/spotify";
-import { TrackInfo, PlaylistInfo } from "./types/spotify";
-import { AuthContext } from "./context/auth";
+import styles from "./style.module.scss";
+import * as spotify from "../../api/spotify";
+import { AuthContext } from "../../context/auth";
 
 const DEFAULT_SONGLINK: string = "https://open.spotify.com/track/56ludMgW4hyQhH6xqzypdO?si=9883047ae8424740";
 const SONGLINK_REGEX: RegExp = new RegExp(
@@ -15,7 +14,7 @@ const SONGLINK_REGEX: RegExp = new RegExp(
 type ProgressState = {
   numPlaylists: number;
   donePlaylists: number;
-  currentPlaylist: PlaylistInfo;
+  currentPlaylist: spotify.PlaylistInfo;
 };
 
 export default function SpotiFind() {
@@ -23,8 +22,8 @@ export default function SpotiFind() {
   const [trackText, setTrackText] = useState<string>(DEFAULT_SONGLINK);
   const [trackTextError, setTrackTextError] = useState("");
   const [progressState, setProgressState] = useState<ProgressState | null>(null);
-  const [trackState, setTrackState] = useState<TrackInfo | null>(null);
-  const [matchesState, setMatchesState] = useState<PlaylistInfo[] | null>(null);
+  const [trackState, setTrackState] = useState<spotify.TrackInfo | null>(null);
+  const [matchesState, setMatchesState] = useState<spotify.PlaylistInfo[] | null>(null);
 
   /**
  * Find if a track exists in any of the user's playlists.
@@ -33,9 +32,9 @@ export default function SpotiFind() {
  * @param {string} accessToken
  * @param {string} targetTrackID
  */
-  async function findTrackInUserPlaylists(accessToken: string, targetTrackID: string): Promise<PlaylistInfo[]> {
+  async function findTrackInUserPlaylists(accessToken: string, targetTrackID: string): Promise<spotify.PlaylistInfo[]> {
     // get track info
-    const trackInfo: TrackInfo = await spotify.getTrack(accessToken, targetTrackID);
+    const trackInfo: spotify.TrackInfo = await spotify.getTrack(accessToken, targetTrackID);
     // update model track
     setTrackState(trackInfo);
     // console.log("Searching for", trackInfo);
@@ -44,7 +43,7 @@ export default function SpotiFind() {
     // console.log(playlists);
 
     // search the track in eachplaylist
-    const matchedPlaylists: PlaylistInfo[] = [];
+    const matchedPlaylists: spotify.PlaylistInfo[] = [];
     for (let i = 0; i < playlists.length; ++i) {
       // update model progress
       setProgressState({
