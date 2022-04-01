@@ -263,7 +263,7 @@ export default function SpotiDiff() {
               playlists={pairPlaylists}
               selection={pairSelectedPlaylistValue}
               changeHandler={handlePairPlaylistChange}
-              label="Other spotify.User's Playlists"
+              label="Other user's Playlists"
             />
           ) : (
             <FormControl fullWidth>
