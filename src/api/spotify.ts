@@ -356,7 +356,8 @@ export async function getTrackAudioFeatures(accessToken: string, trackID: string
     },
   });
   res = await res.json();
-  console.log(res);
+  // console.log(res);
+
   return {
     trackID: trackID,
     acousticness: res.acousticness,

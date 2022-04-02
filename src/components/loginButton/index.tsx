@@ -39,19 +39,16 @@ export default function LoginButton({ backToMainMenuHandler }: { backToMainMenuH
   return authInfo.isAuthenticated ? (
     <div>
       {user && (
-        <Typography
-          variant="h5"
-          style={{ textDecoration: "none", color: "inherit", display: "inline", textAlign: "right" }}
-        >
+        <Typography color="info" variant="h5" style={{ display: "inline", textAlign: "right" }}>
           Welcome, {user!.name}
         </Typography>
       )}
-      <Button color="inherit" onClick={handleLogout} sx={{ ml: "2em" }} startIcon={<LogoutIcon />}>
+      <Button color="info" onClick={handleLogout} sx={{ ml: "2em" }} startIcon={<LogoutIcon />}>
         Logout
       </Button>
     </div>
   ) : (
-    <Button color="inherit" href={spotify.AUTHENTICATION_HREF} startIcon={<LoginIcon />}>
+    <Button color="info" href={spotify.AUTHENTICATION_HREF} startIcon={<LoginIcon />}>
       Login
     </Button>
   );

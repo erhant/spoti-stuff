@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 // user imports
 import MainMenu from "./components/mainmenu";
 import { AuthContext, loggedOutAuthInfo, AuthInfo } from "./context/auth";
@@ -15,6 +16,36 @@ function parseHash(hash: string): AuthInfo {
     tokenType: kvs[1].split("=")[1],
   };
 }
+
+// Material Theme overrides
+const theme = createTheme({
+  palette: {
+    primary: {
+      // spotify dark
+      main: "#191414",
+    },
+    secondary: {
+      // spotify green
+      main: "#1db954",
+    },
+    success: {
+      // spotify lighter green
+      main: "#1ed760",
+    },
+    error: {
+      // Tangerine
+      main: "#ff4632",
+    },
+    warning: {
+      // factory yellow
+      main: "#fae62d",
+    },
+    info: {
+      // white
+      main: "#ffffff",
+    },
+  },
+});
 
 function App() {
   const [authInfo, setAuthInfo] = useState(loggedOutAuthInfo);
@@ -36,7 +67,9 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ authInfo, setAuthInfo }}>
-      <MainMenu />
+      <ThemeProvider theme={theme}>
+        <MainMenu />
+      </ThemeProvider>
     </AuthContext.Provider>
   );
 }

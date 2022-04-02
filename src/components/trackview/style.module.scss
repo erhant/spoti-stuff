@@ -1,7 +1,7 @@
 $bg: rgba(0, 0, 0, 0.5);
 $bg-fb: rgb(0, 0, 0);
-$textcolor: "white";
-$h: 1em; // height of textbox
+$textcolor: white;
+$h: 1.5em; // height of textbox
 
 .box {
   text-align: left;
@@ -13,42 +13,37 @@ $h: 1em; // height of textbox
     height: 100%;
   }
 
-  .trackname {
+  .overlaytext {
     background: $bg-fb;
     background: $bg;
+    color: $textcolor;
+    font-weight: bolder;
+  }
+
+  .trackname {
     position: absolute;
     top: 0;
     left: 0;
     height: $h;
     width: 100%;
-    padding-left: $h * 0.5;
     padding-top: $h * 0.5;
-    color: $textcolor;
   }
 
   .artistname {
-    background: $bg-fb;
-    background: $bg;
     position: absolute;
-    top: $h * 2;
+    top: $h * 1.5;
     left: 0;
     height: $h;
-    padding-left: $h * 0.5;
     padding-top: $h * 0.5;
     width: 100%;
-    color: $textcolor;
   }
 
   .albumname {
-    background: $bg-fb;
-    background: $bg;
     position: absolute;
-    bottom: $h;
+    bottom: $h * 0.1;
     left: 0;
     height: $h * 1.5;
     width: 100%;
-    padding-left: $h * 0.5;
     padding-top: $h * 0.5;
-    color: $textcolor;
   }
 }

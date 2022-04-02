@@ -23,7 +23,7 @@ export default function SpotiPeek() {
     async function load() {
       const track = await spotify.getCurrentlyPlayingTrack(authInfo.accessToken);
       const features = await spotify.getTrackAudioFeatures(authInfo.accessToken, track.id);
-      console.log("Track features:", features);
+
       if (!active) return;
 
       setLoading(false);
@@ -40,6 +40,37 @@ export default function SpotiPeek() {
       </>
     );
   }
+
+  function TrackFeaturesChart({ trackFeatures }: { trackFeatures: spotify.TrackAudioFeatures }) {
+    return (
+      <RadarChart
+        captions={{
+          acousticness: "Acoustic",
+          danceability: "Danceable",
+          energy: "Energic",
+          instrumentalness: "Instrumental",
+          liveness: "Live",
+          speechiness: "Speech",
+          valence: "Positiveness",
+        }}
+        data={[
+          {
+            data: {
+              acousticness: trackFeatures.acousticness,
+              danceability: trackFeatures.danceability,
+              energy: trackFeatures.energy,
+              instrumentalness: trackFeatures.instrumentalness,
+              liveness: trackFeatures.liveness,
+              speechiness: trackFeatures.speechiness,
+              valence: trackFeatures.valence,
+            },
+            meta: { color: "#038b32" },
+          },
+        ]}
+        size={400}
+      />
+    );
+  }
   return (
     <Container className={styles.container}>
       <Grid container justifyContent="center">
@@ -49,37 +80,15 @@ export default function SpotiPeek() {
           </Grid>
         ) : playingTrack ? (
           <>
-            <Grid item xs={6} sx={{ height: "10vh" }}>
+            <Grid item xs={6}>
               <TrackView track={playingTrack} />
             </Grid>
             <Grid item xs={6}>
               {trackFeatures && (
-                <RadarChart
-                  captions={{
-                    acousticness: "Acoustic",
-                    danceability: "Danceable",
-                    energy: "Energic",
-                    instrumentalness: "Instrumental",
-                    liveness: "Live",
-                    speechiness: "Speech",
-                    valence: "Positiveness",
-                  }}
-                  data={[
-                    {
-                      data: {
-                        acousticness: trackFeatures.acousticness,
-                        danceability: trackFeatures.danceability,
-                        energy: trackFeatures.energy,
-                        instrumentalness: trackFeatures.instrumentalness,
-                        liveness: trackFeatures.liveness,
-                        speechiness: trackFeatures.speechiness,
-                        valence: trackFeatures.valence,
-                      },
-                      meta: { color: "green" },
-                    },
-                  ]}
-                  size={400}
-                />
+                <>
+                  <h3>Track Features</h3>
+                  <TrackFeaturesChart trackFeatures={trackFeatures} />
+                </>
               )}
             </Grid>
           </>

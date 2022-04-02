@@ -16,7 +16,7 @@ export default function Header({
       <AppBar position="static">
         <Container>
           <Toolbar variant="regular">
-            <Typography variant="h5" style={{ textDecoration: "none", color: "inherit" }}>
+            <Typography variant="h5" color="info" style={{ textDecoration: "none" }}>
               SpotiStuff
             </Typography>
             {

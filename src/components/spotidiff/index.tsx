@@ -152,7 +152,6 @@ export default function SpotiDiff() {
   useEffect(() => {
     if (myPlaylists && mySelectedPlaylistValue !== "") {
       const pl: spotify.PlaylistInfo = myPlaylists[parseInt(mySelectedPlaylistValue)];
-      console.log(`Selected ${parseInt(mySelectedPlaylistValue)}`, pl);
       spotify.getTrackShortInfosInPlaylist(authInfo.accessToken, pl.id).then((tinfos) => {
         setMyPlaylistTracks(tinfos);
       });
@@ -163,7 +162,6 @@ export default function SpotiDiff() {
   useEffect(() => {
     if (pairPlaylists && pairSelectedPlaylistValue !== "") {
       const pl: spotify.PlaylistInfo = pairPlaylists[parseInt(pairSelectedPlaylistValue)];
-      console.log(`Selected ${parseInt(mySelectedPlaylistValue)}`, pl);
       spotify.getTrackShortInfosInPlaylist(authInfo.accessToken, pl.id).then((tinfos) => {
         setPairPlaylistTracks(tinfos);
       });
@@ -173,7 +171,6 @@ export default function SpotiDiff() {
   // match tracks
   useEffect(() => {
     if (myPlaylistTracks.length > 0 && pairPlaylistTracks.length > 0) {
-      console.log("Matching tracks...");
       const myTrackIDS = myPlaylistTracks.map((t: any) => t.id);
       const pairTrackIDS = pairPlaylistTracks.map((t: any) => t.id);
       // mark the intersecting arrays as matched
@@ -187,7 +184,7 @@ export default function SpotiDiff() {
         }
       }
       setMatchingTracksIDs(matches);
-      console.log("Done, found", matches.length, "matches!");
+      // console.log("Done, found", matches.length, "matches!");
     }
   }, [myPlaylistTracks, pairPlaylistTracks]);
 
@@ -236,13 +233,18 @@ export default function SpotiDiff() {
             <Button
               variant="contained"
               onClick={handleRemovePair}
-              color="primary"
               sx={{ width: "100%", height: "100%" }}
+              color="secondary"
             >
               <PersonRemoveIcon />
             </Button>
           ) : (
-            <Button variant="contained" onClick={handleAddPair} color="primary" sx={{ width: "100%", height: "100%" }}>
+            <Button
+              variant="contained"
+              onClick={handleAddPair}
+              color="secondary"
+              sx={{ width: "100%", height: "100%" }}
+            >
               <PersonAddIcon />
             </Button>
           )}

@@ -1,11 +1,15 @@
 import React, { useState, useContext } from "react";
-import { Container, LinearProgress, TextField, Button } from "@mui/material";
+import { Container, LinearProgress, TextField, Button, Grid } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+
+// user imports
 import styles from "./style.module.scss";
 import * as spotify from "../../api/spotify";
 import { AuthContext } from "../../context/auth";
+import TrackView from "../trackview";
+import PlaylistView from "../playlistview";
 
-const DEFAULT_SONGLINK: string = "https://open.spotify.com/track/56ludMgW4hyQhH6xqzypdO?si=9883047ae8424740";
+const DEFAULT_SONGLINK: string = "https://open.spotify.com/track/2BcvvHttiZRvguFM4hR398?si=5357b1cf356f4cf8";
 const SONGLINK_REGEX: RegExp = new RegExp(
   /^https:\/\/open.spotify.com\/track\/[0-9a-zA-Z]{22}\?si=[0-9a-zA-Z]{16}$/,
   "gs"
@@ -78,64 +82,64 @@ export default function SpotiFind() {
 
   return (
     <Container className={styles.container}>
-      {matchesState ? (
-        <div style={{ textAlign: "left" }}>
-          {matchesState.length === 0 ? (
-            <h1>You do not have this song added.</h1>
-          ) : (
-            <>
-              <h2>This song is in {matchesState.length} lists:</h2>
-              {matchesState.map((match, i) => {
-                return (
-                  <div key={i}>
-                    <img
-                      src={match!.playlistCover}
-                      className={styles.playlistImage}
-                      style={{ float: "left", marginRight: "1em" }}
-                    ></img>
-                    <h2>{match!.name} </h2>
-                  </div>
-                );
-              })}
-            </>
-          )}
-        </div>
-      ) : progressState ? (
-        <>
-          <LinearProgress className={styles.progress} />
-          <h2>Searching playlist: {progressState.currentPlaylist!.name} </h2>
-          <img className={styles.playlistImage} src={progressState.currentPlaylist!.playlistCover} />
-          <h2>
-            Target track: {trackState!.name} - {trackState!.artist.name}
-          </h2>
-          <img className={styles.trackImage} src={trackState!.album.imageURL} />
-        </>
-      ) : (
-        <>
-          <h1>Please enter the song link you would like to search.</h1>
-          <TextField
-            label="Song Link"
-            variant="outlined"
-            color="primary"
-            sx={{ width: "100%" }}
-            defaultValue={DEFAULT_SONGLINK}
-            error={trackTextError !== ""}
-            helperText={trackTextError}
-            onChange={(e) => {
-              setTrackText(e.target.value);
-            }}
-          />
-          <Button
-            variant="outlined"
-            size="large"
-            endIcon={<SearchIcon />}
-            onClick={handleSearchClick}
-            sx={{ marginTop: "2em" }}
-          >
-            Find
-          </Button>
-        </>
-      )}
+      <Grid container justifyContent="center">
+        {matchesState ? (
+          <div style={{ textAlign: "left" }}>
+            {matchesState.length === 0 ? (
+              <h1>You do not have this song added.</h1>
+            ) : (
+              <>
+                <h2>This song is in {matchesState.length} lists:</h2>
+                {matchesState.map((match, i) => {
+                  return (
+                    <Grid item key={i} xs={4}>
+                      <PlaylistView playlist={match} />
+                    </Grid>
+                  );
+                })}
+              </>
+            )}
+          </div>
+        ) : progressState ? (
+          <>
+            <Grid item xs={12}>
+              <h1>Searching your playlists...</h1>
+              <LinearProgress className={styles.progress} color="secondary" />
+            </Grid>
+            <Grid item xs={6}>
+              <TrackView track={trackState!} />
+            </Grid>
+            <Grid item xs={6}>
+              <PlaylistView playlist={progressState.currentPlaylist} />
+            </Grid>
+          </>
+        ) : (
+          <Grid item xs={12}>
+            <h1>Please enter the song link you would like to search.</h1>
+            <TextField
+              label="Song Link"
+              variant="outlined"
+              color="primary"
+              sx={{ width: "100%" }}
+              defaultValue={DEFAULT_SONGLINK}
+              error={trackTextError !== ""}
+              helperText={trackTextError}
+              onChange={(e) => {
+                setTrackText(e.target.value);
+              }}
+            />
+            <Button
+              variant="outlined"
+              size="large"
+              endIcon={<SearchIcon />}
+              onClick={handleSearchClick}
+              sx={{ marginTop: "2em" }}
+            >
+              Find
+            </Button>
+          </Grid>
+        )}
+      </Grid>
     </Container>
   );
 }
