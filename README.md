@@ -9,9 +9,3 @@ A collection of stuff I did with [Spotify Web API](https://developer.spotify.com
 A rough-and-rushed UI design made in [Penpot](https://penpot.app/) is as given below.
 
 ![ui](./misc/rough-ui.png)
-
-## ToDos
-
-- Better error handling (with components). Also check status code of requests.
-- Implement tests
-- Add theme
