@@ -19,3 +19,5 @@ export const AuthContext = createContext({
   // this empty function will be replaced by setState at the parent App.tsx
   setAuthInfo: (authInfo: AuthInfo) => {},
 });
+
+export const SessionStorageKey = "spotistuff_auth";

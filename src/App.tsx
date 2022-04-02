@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 // user imports
 import MainMenu from "./components/mainmenu";
-import { AuthContext, loggedOutAuthInfo, AuthInfo } from "./context/auth";
+import { AuthContext, loggedOutAuthInfo, AuthInfo, SessionStorageKey } from "./context/auth";
 
 // used to obtain the token from spotify redirection
 function parseHash(hash: string): AuthInfo {
@@ -56,11 +56,11 @@ function App() {
       // redirected from spotify
       const authInfo = parseHash(window.location.hash);
       setAuthInfo(authInfo);
-      window.sessionStorage.setItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!, JSON.stringify(authInfo));
+      window.sessionStorage.setItem(SessionStorageKey, JSON.stringify(authInfo));
     } else {
       // refreshed, check session storage for the authentication keys
-      if (window.sessionStorage.getItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!)) {
-        setAuthInfo(JSON.parse(window.sessionStorage.getItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!)!));
+      if (window.sessionStorage.getItem(SessionStorageKey)) {
+        setAuthInfo(JSON.parse(window.sessionStorage.getItem(SessionStorageKey)!));
       }
     }
   }, []);

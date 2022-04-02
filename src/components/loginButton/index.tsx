@@ -4,7 +4,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 // user imports
 import * as spotify from "../../api/spotify";
-import { AuthContext, loggedOutAuthInfo } from "../../context/auth";
+import { AuthContext, loggedOutAuthInfo, SessionStorageKey } from "../../context/auth";
 
 export default function LoginButton({ backToMainMenuHandler }: { backToMainMenuHandler: () => void }) {
   const { authInfo, setAuthInfo } = useContext(AuthContext);
@@ -12,7 +12,7 @@ export default function LoginButton({ backToMainMenuHandler }: { backToMainMenuH
   const handleLogout = () => {
     setAuthInfo(loggedOutAuthInfo);
     backToMainMenuHandler();
-    window.sessionStorage.removeItem(process.env.REACT_APP_SPOTISTUFF_AUTHKEY!);
+    window.sessionStorage.removeItem(SessionStorageKey);
   };
 
   // load username on login
