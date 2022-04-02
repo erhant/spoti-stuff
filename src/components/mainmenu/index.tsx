@@ -10,7 +10,6 @@ import SpotiFind from "../spotifind";
 import SpotiDiff from "../spotidiff";
 import { AuthContext } from "../../context/auth";
 import styles from "./style.module.scss";
-import Footer from "../footer";
 
 enum AppSelection {
   None = 0,
@@ -81,7 +80,10 @@ export default function MainMenu() {
           }[appSel]
         }
       </div>
-      <footer className={styles.footer}>Erhan Tezcan &reg; {new Date().getFullYear()}</footer>
+      <footer className={styles.footer}>
+        &copy; Erhan Tezcan {new Date().getFullYear()} &nbsp;&nbsp; (
+        <a href="https://github.com/erhant/spoti-stuff">GitHub</a>)
+      </footer>
     </div>
   );
 }
