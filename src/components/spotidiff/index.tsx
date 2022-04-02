@@ -230,21 +230,11 @@ export default function SpotiDiff() {
         </Grid>
         <Grid item xs={1}>
           {pair ? (
-            <Button
-              variant="contained"
-              onClick={handleRemovePair}
-              sx={{ width: "100%", height: "100%" }}
-              color="secondary"
-            >
+            <Button variant="outlined" onClick={handleRemovePair} sx={{ width: "100%", height: "100%" }}>
               <PersonRemoveIcon />
             </Button>
           ) : (
-            <Button
-              variant="contained"
-              onClick={handleAddPair}
-              color="secondary"
-              sx={{ width: "100%", height: "100%" }}
-            >
+            <Button variant="outlined" onClick={handleAddPair} sx={{ width: "100%", height: "100%" }}>
               <PersonAddIcon />
             </Button>
           )}

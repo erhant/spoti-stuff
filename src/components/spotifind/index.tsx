@@ -106,10 +106,10 @@ export default function SpotiFind() {
               <h1>Searching your playlists...</h1>
               <LinearProgress className={styles.progress} color="secondary" />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} height="25vh">
               <TrackView track={trackState!} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} height="25vh">
               <PlaylistView playlist={progressState.currentPlaylist} />
             </Grid>
           </>
