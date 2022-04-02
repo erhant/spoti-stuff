@@ -10,6 +10,7 @@ import SpotiFind from "../spotifind";
 import SpotiDiff from "../spotidiff";
 import { AuthContext } from "../../context/auth";
 import styles from "./style.module.scss";
+import Footer from "../footer";
 
 enum AppSelection {
   None = 0,
@@ -57,27 +58,30 @@ export default function MainMenu() {
   const backToMainMenuHandler = () => setAppSel(AppSelection.None);
 
   return (
-    <div>
-      <Header isInMainMenu={appSel === AppSelection.None} backToMainMenuHandler={backToMainMenuHandler} />
-      {
-        /* Render the menu or component */
+    <div className={styles.pageContainer}>
+      <div className={styles.contentWrap}>
+        <Header isInMainMenu={appSel === AppSelection.None} backToMainMenuHandler={backToMainMenuHandler} />
         {
-          // Main menu
-          [AppSelection.None]: (
-            <div className={styles.selectionMenu}>
-              <AppButton selection={AppSelection.Find} setSelection={setAppSel} />
-              <AppButton selection={AppSelection.Peek} setSelection={setAppSel} />
-              <AppButton selection={AppSelection.Diff} setSelection={setAppSel} />
-            </div>
-          ),
-          // SpotiFind
-          [AppSelection.Find]: <SpotiFind />,
-          // SpotiPeek
-          [AppSelection.Peek]: <SpotiPeek />,
-          // SpotiDiff
-          [AppSelection.Diff]: <SpotiDiff />,
-        }[appSel]
-      }
+          /* Render the menu or component */
+          {
+            // Main menu
+            [AppSelection.None]: (
+              <div className={styles.selectionMenu}>
+                <AppButton selection={AppSelection.Find} setSelection={setAppSel} />
+                <AppButton selection={AppSelection.Peek} setSelection={setAppSel} />
+                <AppButton selection={AppSelection.Diff} setSelection={setAppSel} />
+              </div>
+            ),
+            // SpotiFind
+            [AppSelection.Find]: <SpotiFind />,
+            // SpotiPeek
+            [AppSelection.Peek]: <SpotiPeek />,
+            // SpotiDiff
+            [AppSelection.Diff]: <SpotiDiff />,
+          }[appSel]
+        }
+      </div>
+      <footer className={styles.footer}>Erhan Tezcan &reg; {new Date().getFullYear()}</footer>
     </div>
   );
 }

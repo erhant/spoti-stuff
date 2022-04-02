@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from "react";
 import { AppBar, Toolbar, Typography, Container } from "@mui/material";
 // user imports
-import styles from ".style.module.scss";
+import styles from "./style.module.scss";
 import LoginButton from "../loginButton";
 
 export default function Header({
@@ -22,14 +22,9 @@ export default function Header({
             {
               /* Render the return button if not in menu */
               !isInMainMenu && (
-                <Typography
-                  component="a"
-                  onClick={backToMainMenuHandler}
-                  variant="h5"
-                  style={{ textDecoration: "underline", color: "inherit", marginLeft: "1em" }}
-                >
-                  Main Menu
-                </Typography>
+                <span onClick={backToMainMenuHandler} className={styles.mainMenuText}>
+                  &nbsp;&nbsp; Back to Main Menu
+                </span>
               )
             }
             {/* empty component to push button to the right*/}
