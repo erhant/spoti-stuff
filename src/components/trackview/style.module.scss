@@ -1,23 +1,54 @@
-$bgcolor: "rgba(0,0,0,0.2)";
-$h: 1;
+$bg: rgba(0, 0, 0, 0.5);
+$bg-fb: rgb(0, 0, 0);
+$textcolor: "white";
+$h: 1em; // height of textbox
 
-.trackname {
-  backgroundcolor: $bgcolor;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
+.box {
+  text-align: left;
+  position: relative;
 
-.artistname {
-  backgroundcolor: $bgcolor;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
+  .image {
+    object-fit: scale-down;
+    width: 100%;
+    height: 100%;
+  }
 
-.albumname {
-  backgroundcolor: $bgcolor;
-  position: absolute;
-  top: 0;
-  left: 0;
+  .trackname {
+    background: $bg-fb;
+    background: $bg;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: $h;
+    width: 100%;
+    padding-left: $h * 0.5;
+    padding-top: $h * 0.5;
+    color: $textcolor;
+  }
+
+  .artistname {
+    background: $bg-fb;
+    background: $bg;
+    position: absolute;
+    top: $h * 2;
+    left: 0;
+    height: $h;
+    padding-left: $h * 0.5;
+    padding-top: $h * 0.5;
+    width: 100%;
+    color: $textcolor;
+  }
+
+  .albumname {
+    background: $bg-fb;
+    background: $bg;
+    position: absolute;
+    bottom: $h;
+    left: 0;
+    height: $h * 1.5;
+    width: 100%;
+    padding-left: $h * 0.5;
+    padding-top: $h * 0.5;
+    color: $textcolor;
+  }
 }
