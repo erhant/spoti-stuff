@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "../styles/globals.scss";
 import type { AppProps } from "next/app";
 import DefaultMantineTheme from "../themes/default";
 import { UserContextWrapper } from "../context/user";

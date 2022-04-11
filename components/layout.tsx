@@ -5,10 +5,15 @@ import Header from "./header";
 
 type Props = {
   children: ReactChild;
+  resetSelection: () => void;
 };
-const Layout = ({ children }: Props) => {
+const Layout = ({ children, resetSelection }: Props) => {
   return (
-    <AppShell padding="md" header={<Header />} footer={<Footer />}>
+    <AppShell
+      padding="md"
+      header={<Header resetSelection={resetSelection} />}
+      footer={<Footer />}
+    >
       <Container>{children}</Container>
     </AppShell>
   );

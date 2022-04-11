@@ -1,10 +1,57 @@
-import { Header as _Header, Container, Text } from "@mantine/core";
+import {
+  Header as _Header,
+  Container,
+  Text,
+  Title,
+  Group,
+  Button,
+  Anchor,
+} from "@mantine/core";
+import { BrandSpotify } from "tabler-icons-react";
 
-const Header = () => {
+import * as spotify from "../api/spotify";
+import { useSessionContext } from "../context/user";
+
+type Props = {
+  resetSelection: () => void;
+};
+const Header = ({ resetSelection }: Props) => {
+  const { session, setSession } = useSessionContext();
+
   return (
     <_Header height={60} px="lg" mt="lg">
       <Container>
-        <Text>fdjshg</Text>
+        <Group position="left">
+          <BrandSpotify size={36} />
+          <Title
+            order={3}
+            onClick={() => resetSelection()}
+            sx={{ cursor: "pointer" }}
+          >
+            SpotiStuff
+          </Title>
+
+          {/* space in between */}
+          <div style={{ flexGrow: 1 }} />
+
+          {session.user ? (
+            <>
+              <Text>{session.user.name}</Text>
+              <Button
+                onClick={() => {
+                  resetSelection();
+                  setSession({ isAuthenticated: false });
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Anchor href={spotify.AUTHENTICATION_HREF}>
+              <Button>Login</Button>
+            </Anchor>
+          )}
+        </Group>
       </Container>
     </_Header>
   );

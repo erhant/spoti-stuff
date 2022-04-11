@@ -1,27 +1,24 @@
 import { createContext, ReactChild, useContext, useState } from "react";
-import UserType from "../types/user";
+import SessionType from "../types/session";
 
-const defaultUserState: UserType = {
+const defaultUserState: SessionType = {
   isAuthenticated: false,
 };
-const UserContext = createContext({
-  user: defaultUserState,
+const SessionContext = createContext({
+  session: defaultUserState,
   // this empty function will be replaced by setState at the parent App.tsx
-  setUser: (user: UserType) => {},
+  setSession: (session: SessionType) => {},
 });
 
-type Props = {
-  children: ReactChild;
-};
-export const UserContextWrapper = ({ children }: Props) => {
-  const [user, setUser] = useState(defaultUserState);
+export const UserContextWrapper = ({ children }: { children: ReactChild }) => {
+  const [session, setSession] = useState(defaultUserState);
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <SessionContext.Provider value={{ session, setSession }}>
       {children}
-    </UserContext.Provider>
+    </SessionContext.Provider>
   );
 };
 
-export function useUserContext() {
-  return useContext(UserContext);
+export function useSessionContext() {
+  return useContext(SessionContext);
 }
