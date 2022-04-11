@@ -1,7 +1,7 @@
 import { MantineThemeOverride } from "@mantine/core";
 
 const DefaultMantineTheme: MantineThemeOverride = {
-  fontFamily: "Avenir, Verdana, sans-serif",
+  fontFamily: "Gotham Medium, Verdana, sans-serif",
 };
 
 export default DefaultMantineTheme;
