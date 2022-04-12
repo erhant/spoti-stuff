@@ -50,7 +50,7 @@ const SpotiPeek = () => {
         <title>SpotiPeek</title>
       </Head>
       <Title>SpotiPeek</Title>
-      <Text mb="md">See which song you are currently playing, and peek at it's audio features.</Text>
+      <Text mb="md">See which song you are currently playing, and peek at it&apos;s audio features.</Text>
       <Grid align="center" justify="center">
         <Grid.Col xs={12} sm={6}>
           {showTrack()}

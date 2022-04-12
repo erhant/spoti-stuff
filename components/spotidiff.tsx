@@ -212,7 +212,7 @@ const SpotiDiff = () => {
         <Grid.Col xs={6}>
           {userATracks && matchedTrackIDs && (
             <>
-              <Text color="dimmed">First User's Tracks</Text>
+              <Text color="dimmed">First User&apos;s Tracks</Text>
               {TracksTable(userATracks)}
             </>
           )}
@@ -220,7 +220,7 @@ const SpotiDiff = () => {
         <Grid.Col xs={6}>
           {userBTracks && matchedTrackIDs && (
             <>
-              <Text color="dimmed">Second User's Tracks</Text>
+              <Text color="dimmed">Second User&apos;s Tracks</Text>
               {TracksTable(userBTracks)}
             </>
           )}

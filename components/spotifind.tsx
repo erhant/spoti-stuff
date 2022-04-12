@@ -121,7 +121,7 @@ const SpotiFind = () => {
         <title>SpotiFind</title>
       </Head>
       <Title>SpotiFind</Title>
-      <Text mb="md">Find if a track is added in a user's playlists.</Text>
+      <Text mb="md">Find if a track is added in a user&apos;s playlists.</Text>
       <Grid align="center" justify="center">
         {/* 1st row */}
         <Grid.Col xs={5}>
