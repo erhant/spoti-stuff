@@ -7,6 +7,7 @@ import styles from "../styles/mainmenu.module.scss"
 import SpotiDiff from "./spotidiff"
 import SpotiFind from "./spotifind"
 import SpotiPeek from "./spotipeek"
+import Head from "next/head"
 
 type Props = {
   selection: SelectionType
@@ -17,17 +18,22 @@ const MainMenu = ({ selection, setSelection }: Props) => {
 
   return {
     main: (
-      <Group position="center">
-        <Button className={styles["button"]} disabled={!session.user} onClick={() => setSelection("find")}>
-          SpotiFind
-        </Button>
-        <Button className={styles["button"]} disabled={!session.user} onClick={() => setSelection("peek")}>
-          SpotiPeek
-        </Button>
-        <Button className={styles["button"]} disabled={!session.user} onClick={() => setSelection("diff")}>
-          SpotiDiff
-        </Button>
-      </Group>
+      <>
+        <Head>
+          <title>SpotiStuff</title>
+        </Head>
+        <Group position="center">
+          <Button className={styles["button"]} disabled={!session.user} onClick={() => setSelection("find")}>
+            SpotiFind
+          </Button>
+          <Button className={styles["button"]} disabled={!session.user} onClick={() => setSelection("peek")}>
+            SpotiPeek
+          </Button>
+          <Button className={styles["button"]} disabled={!session.user} onClick={() => setSelection("diff")}>
+            SpotiDiff
+          </Button>
+        </Group>
+      </>
     ),
     find: <SpotiFind />,
     peek: <SpotiPeek />,
