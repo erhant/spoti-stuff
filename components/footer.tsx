@@ -1,4 +1,4 @@
-import { Footer as _Footer, Group, Text } from "@mantine/core";
+import { Footer as _Footer, Group, Text } from "@mantine/core"
 
 const Footer = () => {
   return (
@@ -7,7 +7,7 @@ const Footer = () => {
         <Text>&copy; Erhan Tezcan {new Date().getFullYear()} &nbsp; </Text>
       </Group>
     </_Footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

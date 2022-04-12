@@ -1,6 +1,6 @@
 import { Group, Button } from "@mantine/core";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useSessionContext } from "../context/user";
+import { useSessionContext } from "../context/session";
 import SelectionType from "../types/selection";
 import Layout from "./layout";
 import SpotiDiff from "./spotidiff";

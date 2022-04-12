@@ -1,33 +1,22 @@
-import {
-  Header as _Header,
-  Container,
-  Text,
-  Title,
-  Group,
-  Button,
-  Anchor,
-} from "@mantine/core";
-import { BrandSpotify } from "tabler-icons-react";
+import { Header as _Header, Container, Text, Title, Group, Button, Anchor } from "@mantine/core"
+import { BrandSpotify } from "tabler-icons-react"
+import { deleteSessionUser, setSessionUser } from "../api/session-storage"
 
-import * as spotify from "../api/spotify";
-import { useSessionContext } from "../context/user";
+import * as spotify from "../api/spotify"
+import { useSessionContext } from "../context/session"
 
 type Props = {
-  resetSelection: () => void;
-};
+  resetSelection: () => void
+}
 const Header = ({ resetSelection }: Props) => {
-  const { session, setSession } = useSessionContext();
+  const { session, setSession } = useSessionContext()
 
   return (
     <_Header height={60} px="lg" mt="lg">
       <Container>
         <Group position="left">
           <BrandSpotify size={36} />
-          <Title
-            order={3}
-            onClick={() => resetSelection()}
-            sx={{ cursor: "pointer" }}
-          >
+          <Title order={3} onClick={() => resetSelection()} sx={{ cursor: "pointer" }}>
             SpotiStuff
           </Title>
 
@@ -36,11 +25,12 @@ const Header = ({ resetSelection }: Props) => {
 
           {session.user ? (
             <>
-              <Text>{session.user.name}</Text>
+              <Text>Welcome, {session.user.name}</Text>
               <Button
                 onClick={() => {
-                  resetSelection();
-                  setSession({ isAuthenticated: false });
+                  setSession({ isAuthenticated: false })
+                  deleteSessionUser()
+                  resetSelection()
                 }}
               >
                 Logout
@@ -54,7 +44,7 @@ const Header = ({ resetSelection }: Props) => {
         </Group>
       </Container>
     </_Header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
