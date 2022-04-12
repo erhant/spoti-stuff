@@ -6,6 +6,7 @@ import TrackAudioFeaturesView from "./track-audio-features-view"
 import TrackView from "./track-view"
 import { useSessionContext } from "../context/session"
 import { useErrorHandler } from "react-error-boundary"
+import Head from "next/head"
 
 const SpotiPeek = () => {
   const [track, setTrack] = useState<TrackInfo | undefined | null>(undefined)
@@ -45,9 +46,12 @@ const SpotiPeek = () => {
   }
   return (
     <>
+      <Head>
+        <title>SpotiPeek</title>
+      </Head>
       <Title>SpotiPeek</Title>
       <Text mb="md">See which song you are currently playing, and peek at it's audio features.</Text>
-      <Grid>
+      <Grid align="center" justify="center">
         <Grid.Col xs={12} sm={6}>
           {showTrack()}
         </Grid.Col>

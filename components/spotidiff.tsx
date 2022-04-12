@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { PlaylistInfo, ShortTrackInfo, User } from "../types/spotify"
 import * as spotify from "../api/spotify"
 import { useSessionContext } from "../context/session"
+import Head from "next/head"
 
 const DEFAULT_USER_URL: string = "https://open.spotify.com/user/erhany?si=c35f51c79ee14791"
 
@@ -136,10 +137,13 @@ const SpotiDiff = () => {
 
   return (
     <>
+      <Head>
+        <title>SpotiDif</title>
+      </Head>
       <Title>SpotiDiff</Title>
       <Text mb="md">Compare playlists of two users.</Text>
 
-      <Grid>
+      <Grid align="center" justify="center">
         {/* 1st row - User URL Inputs */}
         <Grid.Col xs={6}>
           <TextInput

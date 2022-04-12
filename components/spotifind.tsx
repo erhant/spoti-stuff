@@ -1,11 +1,12 @@
-import { Grid, TextInput, Button, Progress, Text, Title, Divider } from "@mantine/core"
+import { Grid, TextInput, Button, Progress, Text, Title } from "@mantine/core"
 import { useState } from "react"
-import { useErrorHandler } from "react-error-boundary"
 import { PlaylistInfo, TrackInfo } from "../types/spotify"
 import * as spotify from "../api/spotify"
 import { useSessionContext } from "../context/session"
 import PlaylistView from "./playlist-view"
 import TrackView from "./track-view"
+import { Search } from "tabler-icons-react"
+import Head from "next/head"
 
 const DEFAULT_TRACK_URL: string = "https://open.spotify.com/track/2BcvvHttiZRvguFM4hR398?si=5357b1cf356f4cf8"
 const TRACK_URL_REGEX: RegExp = new RegExp(
@@ -116,9 +117,12 @@ const SpotiFind = () => {
 
   return (
     <>
+      <Head>
+        <title>SpotiFind</title>
+      </Head>
       <Title>SpotiFind</Title>
       <Text mb="md">Find if a track is added in a user's playlists.</Text>
-      <Grid>
+      <Grid align="center" justify="center">
         {/* 1st row */}
         <Grid.Col xs={5}>
           <TextInput
@@ -146,6 +150,7 @@ const SpotiFind = () => {
         </Grid.Col>
         <Grid.Col xs={2}>
           <Button
+            size="md"
             disabled={searchStatus === "ongoing"}
             onClick={() => {
               if (searchStatus === "init") {
