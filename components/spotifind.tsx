@@ -1,4 +1,4 @@
-import { Grid, TextInput, Button, Progress, Text } from "@mantine/core"
+import { Grid, TextInput, Button, Progress, Text, Title, Divider } from "@mantine/core"
 import { useState } from "react"
 import { useErrorHandler } from "react-error-boundary"
 import { PlaylistInfo, TrackInfo } from "../types/spotify"
@@ -115,90 +115,95 @@ const SpotiFind = () => {
   }
 
   return (
-    <Grid>
-      {/* 1st row */}
-      <Grid.Col xs={5}>
-        <TextInput
-          placeholder={DEFAULT_TRACK_URL}
-          label="Spotify Track URL"
-          onChange={(e) => {
-            setTrackURL(e.target.value)
-          }}
-          error={trackURLError}
-          value={trackURL}
-          required
-        />
-      </Grid.Col>
-      <Grid.Col xs={5}>
-        <TextInput
-          placeholder={DEFAULT_USER_URL}
-          label="Spotify Profile URL"
-          onChange={(e) => {
-            setUserURL(e.target.value)
-          }}
-          error={userURLError}
-          value={userURL}
-          required
-        />
-      </Grid.Col>
-      <Grid.Col xs={2}>
-        <Button
-          disabled={searchStatus === "ongoing"}
-          onClick={() => {
-            if (searchStatus === "init") {
-              let problems = false
-              // check user
-              if (!USER_URL_REGEX.test(userURL)) {
-                setUserURLError("Invalid profile URL")
-                problems = true
-              } else {
-                setUserURLError("")
+    <>
+      <Title>SpotiFind</Title>
+      <Text mb="md">Find if a track is added in a user's playlists.</Text>
+      <Grid>
+        {/* 1st row */}
+        <Grid.Col xs={5}>
+          <TextInput
+            placeholder={DEFAULT_TRACK_URL}
+            label="Spotify Track URL"
+            onChange={(e) => {
+              setTrackURL(e.target.value)
+            }}
+            error={trackURLError}
+            value={trackURL}
+            required
+          />
+        </Grid.Col>
+        <Grid.Col xs={5}>
+          <TextInput
+            placeholder={DEFAULT_USER_URL}
+            label="Spotify Profile URL"
+            onChange={(e) => {
+              setUserURL(e.target.value)
+            }}
+            error={userURLError}
+            value={userURL}
+            required
+          />
+        </Grid.Col>
+        <Grid.Col xs={2}>
+          <Button
+            disabled={searchStatus === "ongoing"}
+            onClick={() => {
+              if (searchStatus === "init") {
+                let problems = false
+                // check user
+                if (!USER_URL_REGEX.test(userURL)) {
+                  setUserURLError("Invalid profile URL")
+                  problems = true
+                } else {
+                  setUserURLError("")
+                }
+                // check track
+                if (!TRACK_URL_REGEX.test(trackURL)) {
+                  setTrackURLError("Invalid track URL")
+                  problems = true
+                } else {
+                  setTrackURLError("")
+                }
+                if (problems) return
+                else search(trackURL, userURL)
+              } else if (searchStatus === "done") {
+                // reset everything
+                setCurrentPlaylist(undefined)
+                setCurrentTrack(undefined)
+                setFoundPlaylists(undefined)
+                setSearchStatus("init")
+                setSearchedTrackPercentage(0)
               }
-              // check track
-              if (!TRACK_URL_REGEX.test(trackURL)) {
-                setTrackURLError("Invalid track URL")
-                problems = true
-              } else {
-                setTrackURLError("")
-              }
-              if (problems) return
-              else search(trackURL, userURL)
-            } else if (searchStatus === "done") {
-              // reset everything
-              setCurrentPlaylist(undefined)
-              setCurrentTrack(undefined)
-              setFoundPlaylists(undefined)
-              setSearchStatus("init")
-              setSearchedTrackPercentage(0)
+            }}
+          >
+            {searchStatus === "done" ? "Reset" : "Search"}
+          </Button>
+        </Grid.Col>
+
+        {/* 2nd row */}
+        <Grid.Col xs={12}>
+          <Progress
+            animate={searchStatus !== "done"}
+            size="lg"
+            value={searchedTrackPercentage}
+            label={
+              // search did not start
+              searchedTrackPercentage === 0
+                ? "Start searching!"
+                : // search finished
+                searchedTrackPercentage === 100
+                ? "Done!"
+                : // otherwise
+                  searchedTrackPercentage.toFixed(2) + "%"
             }
-          }}
-        >
-          {searchStatus === "done" ? "Reset" : "Search"}
-        </Button>
-      </Grid.Col>
+          />
+        </Grid.Col>
 
-      {/* 2nd row */}
-      <Grid.Col xs={12}>
-        <Progress
-          size="lg"
-          value={searchedTrackPercentage}
-          label={
-            // search did not start
-            searchedTrackPercentage === 0
-              ? "Start searching!"
-              : // search finished
-              searchedTrackPercentage === 100
-              ? "Done!"
-              : // otherwise
-                searchedTrackPercentage.toFixed(2) + "%"
-          }
-        />
-      </Grid.Col>
-
-      {/* 3rd row */}
-      <Grid.Col xs={6}>{showTrack()}</Grid.Col>
-      <Grid.Col xs={6}>{showPlaylistResults()}</Grid.Col>
-    </Grid>
+        {/* 3rd row */}
+        <Grid.Col xs={6}>{showTrack()}</Grid.Col>
+        <Grid.Col xs={6}>{showPlaylistResults()}</Grid.Col>
+      </Grid>
+    </>
   )
 }
 

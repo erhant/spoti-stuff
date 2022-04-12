@@ -1,4 +1,4 @@
-import { Group, Skeleton, Box, Text, Grid, Stack } from "@mantine/core"
+import { Skeleton, Center, Stack, Title, Text, Grid } from "@mantine/core"
 import { useEffect, useState } from "react"
 import { TrackAudioFeatures, TrackInfo } from "../types/spotify"
 import * as spotify from "../api/spotify"
@@ -29,7 +29,7 @@ const SpotiPeek = () => {
    */
   function showTrack() {
     if (track === undefined) return <Skeleton />
-    if (track === null) return <Text>No track is playing.</Text>
+    if (track === null) return <Title>No track is playing.</Title>
     return <TrackView track={track} />
   }
 
@@ -44,14 +44,18 @@ const SpotiPeek = () => {
     }
   }
   return (
-    <Grid>
-      <Grid.Col xs={12} sm={6}>
-        {showTrack()}
-      </Grid.Col>
-      <Grid.Col xs={12} sm={6}>
-        {showTrackFeatures()}
-      </Grid.Col>
-    </Grid>
+    <>
+      <Title>SpotiPeek</Title>
+      <Text mb="md">See which song you are currently playing, and peek at it's audio features.</Text>
+      <Grid>
+        <Grid.Col xs={12} sm={6}>
+          {showTrack()}
+        </Grid.Col>
+        <Grid.Col xs={12} sm={6}>
+          {showTrackFeatures()}
+        </Grid.Col>
+      </Grid>
+    </>
   )
 }
 

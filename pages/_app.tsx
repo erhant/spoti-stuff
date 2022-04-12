@@ -2,7 +2,7 @@ import "../styles/globals.scss"
 import type { AppProps } from "next/app"
 import DefaultMantineTheme from "../themes/default"
 import { SessionContextWrapper } from "../context/session"
-import { MantineProvider, ColorScheme, ColorSchemeProvider } from "@mantine/core"
+import { MantineProvider } from "@mantine/core"
 import { ErrorBoundary, FallbackProps } from "react-error-boundary"
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
@@ -25,9 +25,7 @@ function App({ Component, pageProps }: AppProps) {
         withGlobalStyles
         withNormalizeCSS
       >
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Component {...pageProps} />
-        </ErrorBoundary>
+        <Component {...pageProps} />
       </MantineProvider>
     </SessionContextWrapper>
   )

@@ -30,7 +30,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     // check if user exists in session storage
     const u = getSessionUser()
-    console.log("Read storage")
     if (u) {
       setSession(u)
       return

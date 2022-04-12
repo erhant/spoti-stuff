@@ -1,4 +1,4 @@
-import { Header as _Header, Container, Text, Title, Group, Button, Anchor } from "@mantine/core"
+import { Header as _Header, Container, MediaQuery, Title, Group, Button, Anchor, Avatar, Tooltip } from "@mantine/core"
 import { BrandSpotify } from "tabler-icons-react"
 import { deleteSessionUser, setSessionUser } from "../api/session-storage"
 
@@ -15,8 +15,8 @@ const Header = ({ resetSelection }: Props) => {
     <_Header height={60} px="lg" mt="lg">
       <Container>
         <Group position="left">
-          <BrandSpotify size={36} />
-          <Title order={3} onClick={() => resetSelection()} sx={{ cursor: "pointer" }}>
+          <BrandSpotify size={24} />
+          <Title order={4} onClick={() => resetSelection()} sx={{ cursor: "pointer" }}>
             SpotiStuff
           </Title>
 
@@ -25,7 +25,10 @@ const Header = ({ resetSelection }: Props) => {
 
           {session.user ? (
             <>
-              <Text>Welcome, {session.user.name}</Text>
+              <Tooltip label={`Logged in as ${session.user.name}`}>
+                <Avatar radius={100} src={session.user.imageURL}></Avatar>
+              </Tooltip>
+
               <Button
                 onClick={() => {
                   setSession({ isAuthenticated: false })

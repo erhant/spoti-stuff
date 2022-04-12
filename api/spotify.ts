@@ -57,7 +57,6 @@ export async function getUser(accessToken: string, userID: string): Promise<User
     },
   })
   res = await res.json()
-  // console.log(res);
 
   return {
     name: res.display_name,
@@ -83,8 +82,7 @@ export async function getCurrentlyPlayingTrack(accessToken: string): Promise<Tra
     },
   })
   if (res.status === 204) {
-    // nothing is playing
-    return null
+    return null // nothing is playing
   } else {
     res = await res.json()
     if (res.error) {
@@ -127,7 +125,6 @@ export async function getTrack(accessToken: string, trackID: string): Promise<Tr
     },
   })
   res = await res.json()
-  // console.log(res);
 
   return {
     album: {
@@ -277,7 +274,6 @@ export async function getTrackShortInfosInPlaylist(accessToken: string, playlist
       },
     })
     res = await res.json()
-    // console.log(res);
 
     trackInfos = trackInfos.concat(
       res.items.map((t: any) => {
@@ -313,7 +309,6 @@ export async function getTrackAudioFeatures(accessToken: string, trackID: string
     },
   })
   res = await res.json()
-  // console.log(res);
 
   return {
     trackID: trackID,
