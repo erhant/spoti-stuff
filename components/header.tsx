@@ -2,7 +2,7 @@ import { Header as _Header, Container, MediaQuery, Title, Group, Button, Anchor,
 import { BrandSpotify } from "tabler-icons-react"
 import { deleteSessionUser, setSessionUser } from "../api/session-storage"
 
-import * as spotify from "../api/spotify"
+import spotify from "../api/spotify"
 import { useSessionContext } from "../context/session"
 
 type Props = {
@@ -40,7 +40,7 @@ const Header = ({ resetSelection }: Props) => {
               </Button>
             </>
           ) : (
-            <Anchor href={spotify.AUTHENTICATION_HREF}>
+            <Anchor href={spotify.getAuthenticationHREF()}>
               <Button>Login</Button>
             </Anchor>
           )}

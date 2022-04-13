@@ -1,14 +1,13 @@
 import { Table, Grid, Text, Select, TextInput, ScrollArea, Title } from "@mantine/core"
 import { useEffect, useState } from "react"
 import { PlaylistInfo, ShortTrackInfo, User } from "../types/spotify"
-import * as spotify from "../api/spotify"
+import spotify from "../api/spotify"
 import { useSessionContext } from "../context/session"
 import Head from "next/head"
 
 const DEFAULT_USER_URL: string = "https://open.spotify.com/user/erhany?si=c35f51c79ee14791"
 
 const SpotiDiff = () => {
-  const { session } = useSessionContext()
   // user A
   const [userA, setUserA] = useState<User | undefined>(undefined)
   const [userAURL, setUserAURL] = useState(DEFAULT_USER_URL)
@@ -65,7 +64,7 @@ const SpotiDiff = () => {
     if (USER_URL_REGEX.test(userAURL)) {
       setUserAURLError("")
       const userID: string = userAURL.split("?")[0].split("/").at(-1)!
-      spotify.getUser(session.authInfo!.accessToken, userID).then((u) => setUserA(u))
+      spotify.getUser(userID).then((u) => setUserA(u))
     } else {
       setUserAURLError("Invalid Spotify Profile URL")
     }
@@ -80,7 +79,7 @@ const SpotiDiff = () => {
     if (USER_URL_REGEX.test(userBURL)) {
       setUserBURLError("")
       const userID: string = userBURL.split("?")[0].split("/").at(-1)!
-      spotify.getUser(session.authInfo!.accessToken, userID).then((u) => setUserB(u))
+      spotify.getUser(userID).then((u) => setUserB(u))
     } else {
       setUserBURLError("Invalid Spotify Profile URL")
     }
@@ -89,32 +88,28 @@ const SpotiDiff = () => {
   // update user A playlists
   useEffect(() => {
     if (userA) {
-      spotify.getUserPlaylists(session.authInfo!.accessToken, userA.id).then((pls) => setUserAPlaylists(pls))
+      spotify.getUserPlaylists(userA.id).then((pls) => setUserAPlaylists(pls))
     }
   }, [userA])
 
   // update user B playlists
   useEffect(() => {
     if (userB) {
-      spotify.getUserPlaylists(session.authInfo!.accessToken, userB.id).then((pls) => setUserBPlaylists(pls))
+      spotify.getUserPlaylists(userB.id).then((pls) => setUserBPlaylists(pls))
     }
   }, [userB])
 
   // update user A playlist tracks
   useEffect(() => {
     if (userAPlaylistID !== "") {
-      spotify
-        .getTrackShortInfosInPlaylist(session.authInfo!.accessToken, userAPlaylistID)
-        .then((ts) => setUserATracks(ts))
+      spotify.getTrackShortInfosInPlaylist(userAPlaylistID).then((ts) => setUserATracks(ts))
     }
   }, [userAPlaylistID])
 
   // update user B playlist tracks
   useEffect(() => {
     if (userBPlaylistID !== "") {
-      spotify
-        .getTrackShortInfosInPlaylist(session.authInfo!.accessToken, userBPlaylistID)
-        .then((ts) => setUserBTracks(ts))
+      spotify.getTrackShortInfosInPlaylist(userBPlaylistID).then((ts) => setUserBTracks(ts))
     }
   }, [userBPlaylistID])
 

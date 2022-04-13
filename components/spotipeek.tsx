@@ -1,7 +1,7 @@
 import { Skeleton, Center, Stack, Title, Text, Grid } from "@mantine/core"
 import { useEffect, useState } from "react"
 import { TrackAudioFeatures, TrackInfo } from "../types/spotify"
-import * as spotify from "../api/spotify"
+import spotify from "../api/spotify"
 import TrackAudioFeaturesView from "./track-audio-features-view"
 import TrackView from "./track-view"
 import { useSessionContext } from "../context/session"
@@ -11,18 +11,13 @@ import Head from "next/head"
 const SpotiPeek = () => {
   const [track, setTrack] = useState<TrackInfo | undefined | null>(undefined)
   const [taf, setTaf] = useState<TrackAudioFeatures | undefined>(undefined)
-  const { session } = useSessionContext()
-  const handleError = useErrorHandler()
 
   useEffect(() => {
-    if (session.authInfo) {
-      spotify.getCurrentlyPlayingTrack(session.authInfo.accessToken).then((t) => setTrack(t), handleError)
-    }
+    spotify.getCurrentlyPlayingTrack().then((t) => setTrack(t))
   }, [])
 
   useEffect(() => {
-    if (track)
-      spotify.getTrackAudioFeatures(session.authInfo!.accessToken, track.id).then((taf) => setTaf(taf), handleError)
+    if (track) spotify.getTrackAudioFeatures(track.id).then((taf) => setTaf(taf))
   }, [track])
 
   /**

@@ -1,7 +1,7 @@
 import { Grid, TextInput, Button, Progress, Text, Title } from "@mantine/core"
 import { useState } from "react"
 import { PlaylistInfo, TrackInfo } from "../types/spotify"
-import * as spotify from "../api/spotify"
+import spotify from "../api/spotify"
 import { useSessionContext } from "../context/session"
 import PlaylistView from "./playlist-view"
 import TrackView from "./track-view"
@@ -17,7 +17,6 @@ const DEFAULT_USER_URL: string = "https://open.spotify.com/user/erhany?si=c35f51
 const USER_URL_REGEX: RegExp = new RegExp(/^https:\/\/open.spotify.com\/user\/[0-9a-zA-Z]+\?si=[0-9a-zA-Z]{16}$/, "gs")
 
 const SpotiFind = () => {
-  const { session } = useSessionContext()
   // user URL states
   const [userURL, setUserURL] = useState(DEFAULT_USER_URL)
   const [userURLError, setUserURLError] = useState("")
@@ -44,10 +43,10 @@ const SpotiFind = () => {
     const matches: PlaylistInfo[] = []
 
     // show the given track information
-    spotify.getTrack(session.authInfo!.accessToken, trackID).then((track) => setCurrentTrack(track))
+    spotify.getTrack(trackID).then((track) => setCurrentTrack(track))
 
     // retrieve user playlists
-    const playlists: PlaylistInfo[] = await spotify.getUserPlaylists(session.authInfo!.accessToken, userID)
+    const playlists: PlaylistInfo[] = await spotify.getUserPlaylists(userID)
     const totalTrackCount = playlists.reduce<number>((acc, pl) => {
       return acc + pl.numTracks
     }, 0)
@@ -56,7 +55,7 @@ const SpotiFind = () => {
     for (let i = 0; i < playlists.length; ++i) {
       const pl: PlaylistInfo = playlists[i]
       setCurrentPlaylist(pl)
-      const trackIDs: string[] = await spotify.getTrackIDsInPlaylist(session.authInfo!.accessToken, pl.id)
+      const trackIDs: string[] = await spotify.getTrackIDsInPlaylist(pl.id)
       if (trackIDs.includes(trackID)) {
         matches.push(pl)
       }
