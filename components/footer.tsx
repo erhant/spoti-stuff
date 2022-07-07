@@ -1,5 +1,5 @@
 import { Footer as _Footer, Group, Text, Anchor } from "@mantine/core"
-import { BrandGithub } from "tabler-icons-react"
+import { BrandGithub } from "./tabler-icons"
 
 const Footer = () => {
   return (

@@ -1,6 +1,6 @@
-import { Header as _Header, Container, MediaQuery, Title, Group, Button, Anchor, Avatar, Tooltip } from "@mantine/core"
-import { BrandSpotify } from "tabler-icons-react"
-import { deleteSessionUser, setSessionUser } from "../api/session-storage"
+import { Header as _Header, Container, Title, Group, Button, Anchor, Avatar, Tooltip } from "@mantine/core"
+import { BrandSpotify } from "./tabler-icons"
+import { deleteSessionUser } from "../api/session-storage"
 
 import spotify from "../api/spotify"
 import { useSessionContext } from "../context/session"

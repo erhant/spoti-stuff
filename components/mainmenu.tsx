@@ -6,7 +6,6 @@ import SpotiDiff from "./spotidiff"
 import SpotiFind from "./spotifind"
 import SpotiPeek from "./spotipeek"
 import Head from "next/head"
-import type { Icon } from "tabler-icons-react"
 
 type Props = {
   selection: SelectionType

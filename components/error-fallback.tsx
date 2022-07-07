@@ -1,6 +1,6 @@
 import { Notification, Text } from "@mantine/core"
 import { FallbackProps } from "react-error-boundary"
-import { X } from "tabler-icons-react"
+import { X } from "./tabler-icons"
 
 const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (

@@ -31,6 +31,7 @@ const SpotiPeek = () => {
 
   /**
    * Shows track features.
+   * @see TrackAudioFeaturesView
    */
   function showTrackFeatures() {
     if (taf) {
