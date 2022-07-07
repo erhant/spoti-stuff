@@ -11,13 +11,11 @@ type Props = {
 }
 const Layout = ({ children, resetSelection }: Props) => {
   return (
-    <AppShell padding="md" header={<Header resetSelection={resetSelection} />} footer={<Footer />}>
-      <Container>
-        <ErrorBoundary onReset={resetSelection} FallbackComponent={ErrorFallback}>
-          {children}
-        </ErrorBoundary>
-      </Container>
-    </AppShell>
+    <ErrorBoundary onReset={resetSelection} FallbackComponent={ErrorFallback}>
+      <AppShell padding="md" header={<Header resetSelection={resetSelection} />} footer={<Footer />}>
+        <Container>{children}</Container>
+      </AppShell>
+    </ErrorBoundary>
   )
 }
 

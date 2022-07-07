@@ -5,7 +5,7 @@ import MainMenu from "../components/mainmenu"
 import Layout from "../components/layout"
 import { useSessionContext } from "../context/session"
 import AuthInfoType from "../types/authInfo"
-import * as spotify from "../api/spotify"
+import spotify from "../api/spotify"
 import SessionType from "../types/session"
 import { getSessionUser, setSessionUser } from "../api/session-storage"
 import SelectionType from "../types/selection"
@@ -32,6 +32,7 @@ const Home: NextPage = () => {
     const u = getSessionUser()
     if (u) {
       setSession(u)
+      spotify.setAccessToken(u.authInfo!.accessToken)
       return
     }
 
@@ -39,7 +40,8 @@ const Home: NextPage = () => {
     if (window.location.hash.length > 0) {
       // parse authentication token
       const authInfo = parseHash(window.location.hash)
-      spotify.getCurrentUser(authInfo.accessToken).then((user) => {
+      spotify.setAccessToken(authInfo.accessToken)
+      spotify.getCurrentUser().then((user) => {
         const session: SessionType = {
           isAuthenticated: true,
           authInfo: authInfo,
@@ -49,7 +51,7 @@ const Home: NextPage = () => {
         setSession(session)
       })
     }
-  }, [setSession])
+  }, [])
 
   return (
     <>

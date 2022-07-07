@@ -1,4 +1,4 @@
-import { Center, ScrollArea, Stack, Text } from "@mantine/core"
+import { Title, Stack } from "@mantine/core"
 import { TrackAudioFeatures } from "../types/spotify"
 import TrackFeature from "./track-feature"
 
@@ -8,7 +8,9 @@ type Props = {
 const TrackAudioFeaturesView = ({ taf }: Props) => {
   return (
     <Stack>
-      <Text sx={{ textAlign: "center" }}>Track Features</Text>
+      <Title order={4} sx={{ textAlign: "center" }}>
+        Track Features
+      </Title>
       <TrackFeature label="Acousticness" feature={taf.acousticness * 100} />
       <TrackFeature label="Energy" feature={taf.energy * 100} />
       <TrackFeature label="Instrumentalness" feature={taf.instrumentalness * 100} />
